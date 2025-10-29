@@ -1,5 +1,6 @@
 import axios from "axios";
 import demoData from "./demoTopMovers.json";
+import overviewDemoData from "./demoOverview.json";
 
 const BASE = "https://www.alphavantage.co/query";
 const ALPHA_VANTAGE_API_KEY = "123";
@@ -35,23 +36,16 @@ export const getOverview = async (symbol: string) => {
 
     if (res.data?.Note || res.data?.Information) {
       console.warn("Limit reached for getOverview.");
-      return {
-        Name: symbol,
-        Symbol: symbol,
-        Industry: "Demo Industry",
-        MarketCapitalization: "123456789",
-      };
+
+      const data = overviewDemoData.companies.find((c) => c.Symbol === symbol);
+      return data;
     }
 
     return res.data;
   } catch (err) {
     console.error("Error fetching overview:", err);
-    return {
-      Name: symbol,
-      Symbol: symbol,
-      Industry: "Demo Industry",
-      MarketCapitalization: "123456789",
-    };
+    const data = overviewDemoData.companies.find((c) => c.Symbol === symbol);
+    return data;
   }
 };
 

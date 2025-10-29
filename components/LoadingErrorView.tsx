@@ -34,7 +34,7 @@ export default function LoadingErrorView({ loading, error }: any) {
 
   if (loading)
     return (
-      <View className="flex-1 items-center justify-center bg-black">
+      <View className="flex-1 items-center justify-center">
         <Animated.View
           style={{
             opacity: fadeAnim,
