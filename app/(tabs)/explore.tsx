@@ -30,8 +30,16 @@ export default function Explore() {
     <View style={{ marginBottom: 24 }}>
       <View className="flex-row justify-between items-center mb-2">
         <Text className="text-xl font-bold">{title}</Text>
-        <Link href="/viewall" className="">
-          view All
+        <Link
+          href={{
+            pathname: "/viewall",
+            params: {
+              title: title,
+              type: title.replace(" ", "_").toLowerCase(),
+            },
+          }}
+        >
+          View All
         </Link>
       </View>
       <View className="flex flex-row flex-wrap justify-between px-4">

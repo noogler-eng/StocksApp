@@ -39,7 +39,6 @@ export default function WatchlistScreen() {
             <StockCard
               symbol={item}
               price={"—"} 
-              change={"—"}
               onPress={() => router.push(`/product/${item}`)}
             />
           )}
