@@ -1,0 +1,255 @@
+{
+  "metadata": "Demo fallback data for Top Gainers, Losers, and Most Actively Traded stocks",
+  "last_updated": "2025-10-28 16:15:58 US/Eastern",
+  "top_gainers": [
+    {
+      "ticker": "AAPL",
+      "price": "192.30",
+      "change_amount": "3.20",
+      "change_percentage": "1.69%",
+      "volume": "34000000"
+    },
+    {
+      "ticker": "MSFT",
+      "price": "374.50",
+      "change_amount": "4.10",
+      "change_percentage": "1.11%",
+      "volume": "28000000"
+    },
+    {
+      "ticker": "NVDA",
+      "price": "201.03",
+      "change_amount": "9.54",
+      "change_percentage": "4.98%",
+      "volume": "287802264"
+    },
+    {
+      "ticker": "TSLA",
+      "price": "260.40",
+      "change_amount": "5.30",
+      "change_percentage": "2.08%",
+      "volume": "78000000"
+    },
+    {
+      "ticker": "AMZN",
+      "price": "141.20",
+      "change_amount": "2.60",
+      "change_percentage": "1.88%",
+      "volume": "56000000"
+    },
+    {
+      "ticker": "META",
+      "price": "341.90",
+      "change_amount": "6.40",
+      "change_percentage": "1.91%",
+      "volume": "42000000"
+    },
+    {
+      "ticker": "NFLX",
+      "price": "468.15",
+      "change_amount": "8.30",
+      "change_percentage": "1.81%",
+      "volume": "25000000"
+    },
+    {
+      "ticker": "INTC",
+      "price": "41.53",
+      "change_amount": "1.99",
+      "change_percentage": "5.03%",
+      "volume": "179848988"
+    },
+    {
+      "ticker": "AMD",
+      "price": "124.70",
+      "change_amount": "3.20",
+      "change_percentage": "2.63%",
+      "volume": "99000000"
+    },
+    {
+      "ticker": "SOFI",
+      "price": "31.66",
+      "change_amount": "1.66",
+      "change_percentage": "5.53%",
+      "volume": "181083201"
+    }
+  ],
+  "top_losers": [
+    {
+      "ticker": "GOOG",
+      "price": "132.50",
+      "change_amount": "-2.80",
+      "change_percentage": "-2.07%",
+      "volume": "20000000"
+    },
+    {
+      "ticker": "PYPL",
+      "price": "54.10",
+      "change_amount": "-1.90",
+      "change_percentage": "-3.39%",
+      "volume": "15000000"
+    },
+    {
+      "ticker": "UBER",
+      "price": "45.60",
+      "change_amount": "-1.20",
+      "change_percentage": "-2.56%",
+      "volume": "32000000"
+    },
+    {
+      "ticker": "DIS",
+      "price": "86.40",
+      "change_amount": "-2.10",
+      "change_percentage": "-2.37%",
+      "volume": "28000000"
+    },
+    {
+      "ticker": "BABA",
+      "price": "79.20",
+      "change_amount": "-3.00",
+      "change_percentage": "-3.65%",
+      "volume": "34000000"
+    },
+    {
+      "ticker": "SHOP",
+      "price": "55.70",
+      "change_amount": "-1.50",
+      "change_percentage": "-2.62%",
+      "volume": "19000000"
+    },
+    {
+      "ticker": "COIN",
+      "price": "126.40",
+      "change_amount": "-7.60",
+      "change_percentage": "-5.67%",
+      "volume": "27000000"
+    },
+    {
+      "ticker": "NIO",
+      "price": "7.45",
+      "change_amount": "-0.40",
+      "change_percentage": "-5.10%",
+      "volume": "45000000"
+    },
+    {
+      "ticker": "RBLX",
+      "price": "31.10",
+      "change_amount": "-1.80",
+      "change_percentage": "-5.47%",
+      "volume": "12000000"
+    },
+    {
+      "ticker": "PINS",
+      "price": "28.20",
+      "change_amount": "-0.90",
+      "change_percentage": "-3.10%",
+      "volume": "14000000"
+    }
+  ],
+  "most_actively_traded": [
+    {
+      "ticker": "NVDA",
+      "price": "201.03",
+      "change_amount": "9.54",
+      "change_percentage": "4.98%",
+      "volume": "287802264"
+    },
+    {
+      "ticker": "XHLD",
+      "price": "0.425",
+      "change_amount": "0.1452",
+      "change_percentage": "51.89%",
+      "volume": "836104568"
+    },
+    {
+      "ticker": "BYND",
+      "price": "1.975",
+      "change_amount": "0.165",
+      "change_percentage": "9.11%",
+      "volume": "469986726"
+    },
+    {
+      "ticker": "NOK",
+      "price": "7.775",
+      "change_amount": "1.4498",
+      "change_percentage": "22.92%",
+      "volume": "370784997"
+    },
+    {
+      "ticker": "BBAI",
+      "price": "6.775",
+      "change_amount": "-0.325",
+      "change_percentage": "-4.57%",
+      "volume": "356724760"
+    },
+    {
+      "ticker": "ADTX",
+      "price": "0.1309",
+      "change_amount": "-0.0631",
+      "change_percentage": "-32.52%",
+      "volume": "197579932"
+    },
+    {
+      "ticker": "SOFI",
+      "price": "31.66",
+      "change_amount": "1.66",
+      "change_percentage": "5.53%",
+      "volume": "181083201"
+    },
+    {
+      "ticker": "INTC",
+      "price": "41.53",
+      "change_amount": "1.99",
+      "change_percentage": "5.03%",
+      "volume": "179848988"
+    },
+    {
+      "ticker": "TSLL",
+      "price": "22.02",
+      "change_amount": "0.77",
+      "change_percentage": "3.62%",
+      "volume": "138975963"
+    },
+    {
+      "ticker": "WULF",
+      "price": "15.94",
+      "change_amount": "2.30",
+      "change_percentage": "16.86%",
+      "volume": "112413843"
+    },
+    {
+      "ticker": "AMD",
+      "price": "124.70",
+      "change_amount": "3.20",
+      "change_percentage": "2.63%",
+      "volume": "99000000"
+    },
+    {
+      "ticker": "TSLA",
+      "price": "260.40",
+      "change_amount": "5.30",
+      "change_percentage": "2.08%",
+      "volume": "78000000"
+    },
+    {
+      "ticker": "AAPL",
+      "price": "192.30",
+      "change_amount": "3.20",
+      "change_percentage": "1.69%",
+      "volume": "34000000"
+    },
+    {
+      "ticker": "AMZN",
+      "price": "141.20",
+      "change_amount": "2.60",
+      "change_percentage": "1.88%",
+      "volume": "56000000"
+    },
+    {
+      "ticker": "META",
+      "price": "341.90",
+      "change_amount": "6.40",
+      "change_percentage": "1.91%",
+      "volume": "42000000"
+    }
+  ]
+}

@@ -1,28 +1,28 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
-import { Stack } from "expo-router";
-import "react-native-reanimated";
+import "@/global.css";
 
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { Stack } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export const unstable_settings = {
   anchor: "(tabs)",
 };
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    <SafeAreaView className="flex-1 bg-white">
+      <Stack
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Stack.Screen name="(tabs)" />
         <Stack.Screen name="viewall" />
         <Stack.Screen name="product/[symbol]" />
-        <Stack.Screen name="modal" options={{ presentation: "modal", title: "Modal" }} />
+        <Stack.Screen
+          name="modal"
+          options={{ presentation: "modal", title: "Modal" }}
+        />
       </Stack>
-    </ThemeProvider>
+    </SafeAreaView>
   );
 }
