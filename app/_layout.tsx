@@ -18,10 +18,6 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="viewall" />
         <Stack.Screen name="product/[symbol_price]" />
-        <Stack.Screen
-          name="modal"
-          options={{ presentation: "modal", title: "Modal" }}
-        />
       </Stack>
     </SafeAreaView>
   );

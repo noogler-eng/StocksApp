@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ActivityIndicator, ScrollView } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { getOverview } from "@/api/alphaVantage";
 import FiftyTwoWeekRange from "@/components/FiftyTwoWeekRange";
 import Graph from "@/components/Graph";
 import WatchlistButton from "@/components/WatchlistButton";
 
+import { TimelineType } from "@/utils/types";
+import LoadingErrorView from "@/components/LoadingErrorView";
+import Avtaar from "@/components/Avtaar";
+
 export default function ProductScreen() {
   const { symbol_price } = useLocalSearchParams<{ symbol_price: string }>();
 
-  console.log("symbol_price param:", symbol_price); 
+  console.log("symbol_price param:", symbol_price);
 
-  const [chartTimeline, setChartTimeline] = useState<
-    | "TIME_SERIES_INTRADAY"
-    | "TIME_SERIES_DAILY"
-    | "TIME_SERIES_DAILY_ADJUSTED"
-    | "TIME_SERIES_WEEKLY"
-    | "TIME_SERIES_WEEKLY_ADJUSTED"
-    | "TIME_SERIES_MONTHLY"
-    | "TIME_SERIES_MONTHLY_ADJUSTED"
-  >("TIME_SERIES_DAILY");
+  const [chartTimeline, setChartTimeline] =
+    useState<TimelineType>("TIME_SERIES_DAILY");
   const [overview, setOverview] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  // Extract symbol and price from the parameter
   const symbol = symbol_price.split("_")[0];
   const price = symbol_price.split("_")[1];
 
@@ -33,7 +33,8 @@ export default function ProductScreen() {
         const overviewData = await getOverview(symbol);
         setOverview(overviewData);
       } catch (err) {
-        console.error(err);
+        console.error("Speicifc stock component: ", err);
+        setError(err as Error);
       } finally {
         setLoading(false);
       }
@@ -42,39 +43,43 @@ export default function ProductScreen() {
     fetchData();
   }, [symbol]);
 
-  if (loading) {
-    return (
-      <View className="flex-1 justify-center items-center bg-gray-50 dark:bg-black">
-        <ActivityIndicator size="large" color="#007AFF" />
-      </View>
-    );
+  if (loading || error) {
+    return <LoadingErrorView loading={loading} error={error} />;
   }
 
   return (
     <ScrollView
       className="flex-1 bg-white px-5"
+      stickyHeaderIndices={[0]}
       showsVerticalScrollIndicator={false}
     >
-      <View className="flex-row justify-between items-center mt-6 mb-3 px-2 py-3 border-b border-gray-200">
-        <View>
-          <Text className="text-3xl font-extrabold">Detailed Overview</Text>
-        </View>
+      <View className="flex-row items-center justify-between px-4 py-3 mb-2 border-b border-gray-300 bg-white">
+        <Text className="text-2xl font-extrabold">Detailed Overview</Text>
         <WatchlistButton symbol={symbol} price={price} />
       </View>
 
-      <View>
-        <View>
-          <View></View>
+      <View className="bg-white rounded-2xl p-4 shadow-lg my-4 flex-row items-center">
+        <Avtaar initials={symbol?.[0] ?? "?"} size={60} />
+        <View className="flex-row items-center justify-between w-5/6 p-4">
+          <View className="flex items-start">
+            <Text className="text-xl font-bold">{symbol}</Text>
+            <Text className=" text-gray-500">{overview.Name}</Text>
+            <Text className="">{overview.Exchange}</Text>
+          </View>
+          <View>
+            <Text className="text-xl font-bold">${price}</Text>
+            <Text className="text-xs font-semibold text-green-400 mt-1">
+              +0.00 (0.00%)
+            </Text>
+          </View>
         </View>
       </View>
 
-      <View>
-        <Graph
-          timeline={chartTimeline}
-          symbol={symbol}
-          setChartTimeline={setChartTimeline}
-        />
-      </View>
+      <Graph
+        timeline={chartTimeline}
+        symbol={symbol}
+        setChartTimeline={setChartTimeline}
+      />
 
       <View className="border border-1 border-gray-200 rounded-lg p-4 mb-12">
         <Text className="font-bold mb-3 text-xl">About {symbol}</Text>
@@ -94,7 +99,7 @@ export default function ProductScreen() {
           </View>
         </View>
 
-        <FiftyTwoWeekRange overview={overview} curr_price={price} />
+        <FiftyTwoWeekRange overview={overview} price={price} />
 
         <View className="flex-row justify-between flex-wrap mt-12">
           <View className="flex border-r border-gray-300 pr-1">

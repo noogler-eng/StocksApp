@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import timeData from "@/api/timeSeriesData.json";
+import { TimelineType } from "@/utils/types";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
@@ -16,20 +17,12 @@ export default function Graph({
   symbol,
   setChartTimeline,
 }: {
-  timeline:
-    | "TIME_SERIES_INTRADAY"
-    | "TIME_SERIES_DAILY"
-    | "TIME_SERIES_DAILY_ADJUSTED"
-    | "TIME_SERIES_WEEKLY"
-    | "TIME_SERIES_WEEKLY_ADJUSTED"
-    | "TIME_SERIES_MONTHLY"
-    | "TIME_SERIES_MONTHLY_ADJUSTED";
+  timeline: TimelineType;
   symbol: string;
   setChartTimeline: any;
 }) {
   const [zoomLevel, setZoomLevel] = useState(1); // 1 = show all, 2 = show half, etc.
 
-  // 📊 Access the correct nested data structure
   const selectedData = useMemo(() => {
     if (timeline === "TIME_SERIES_INTRADAY") {
       return timeData[timeline]?.Data || {};
@@ -37,7 +30,6 @@ export default function Graph({
     return timeData[timeline] || {};
   }, [timeline]);
 
-  // 🔁 Convert to array of {date, close} and reverse for chronological order
   const chartData = useMemo(() => {
     const entries = Object.entries(selectedData);
     const mapped = entries.map(([date, v]: any) => ({
@@ -88,11 +80,8 @@ export default function Graph({
   const timelineLabels: Record<string, string> = {
     TIME_SERIES_INTRADAY: "5min",
     TIME_SERIES_DAILY: "Daily",
-    TIME_SERIES_DAILY_ADJUSTED: "Daily Adj",
     TIME_SERIES_WEEKLY: "Weekly",
-    TIME_SERIES_WEEKLY_ADJUSTED: "Weekly Adj",
     TIME_SERIES_MONTHLY: "Monthly",
-    TIME_SERIES_MONTHLY_ADJUSTED: "Monthly Adj",
   };
 
   // Calculate chart dimensions based on zoom
@@ -108,7 +97,7 @@ export default function Graph({
   return (
     <View className="bg-white rounded-2xl shadow p-4 mt-4">
       <View className="flex-row justify-between items-center mb-3">
-        <Text className="text-lg font-bold text-orange-600">
+        <Text className="text-lg font-bold text-black">
           {symbol} Price Trend
         </Text>
         <Text className="text-xs text-gray-500">
@@ -187,21 +176,13 @@ export default function Graph({
         ))}
       </View>
 
-      {/* Timeline Selection */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        className="mt-2"
-      >
+      <View className="mt-2 flex items-center">
         <View className="flex-row gap-2">
           {[
             "TIME_SERIES_INTRADAY",
             "TIME_SERIES_DAILY",
-            "TIME_SERIES_DAILY_ADJUSTED",
             "TIME_SERIES_WEEKLY",
-            "TIME_SERIES_WEEKLY_ADJUSTED",
             "TIME_SERIES_MONTHLY",
-            "TIME_SERIES_MONTHLY_ADJUSTED",
           ].map((t) => (
             <TouchableOpacity
               key={t}
@@ -223,7 +204,7 @@ export default function Graph({
             </TouchableOpacity>
           ))}
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 }

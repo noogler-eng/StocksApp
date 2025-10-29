@@ -1,12 +1,12 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-export default function FiftyTwoWeekRange({ overview, curr_price }: any) {
+export default function FiftyTwoWeekRange({ overview, price }: any) {
   const low = parseFloat(overview["52WeekLow"]);
   const high = parseFloat(overview["52WeekHigh"]);
 
   // Normalize the current price position between 0 and 1
-  const position = Math.min(Math.max((curr_price - low) / (high - low), 0), 1);
+  const position = Math.min(Math.max((price - low) / (high - low), 0), 1);
 
   return (
     <View className="mt-5">
@@ -18,18 +18,21 @@ export default function FiftyTwoWeekRange({ overview, curr_price }: any) {
 
         <View className="relative flex-1 mx-2">
           <View className="h-1 bg-gray-300 rounded-full" />
-
           <View
             className="absolute -top-2 items-center"
             style={{
-              left: `${position * 400}%`,
-              transform: [{ translateX: -8 }],
+              left: 0,
+              right: 0,
+              alignItems: "flex-start",
+              paddingLeft: `${position * 100}%`,
             }}
           >
-            <Text className="text-orange-600 text-xs">▲</Text>
-            <Text className="text-[10px] text-orange-700 font-semibold text-center">
-              {"current price $" + curr_price}
-            </Text>
+            <View style={{ marginLeft: -8 }}>
+              <Text className="text-orange-600 text-xs">▲</Text>
+              <Text className="text-[10px] text-orange-700 font-semibold text-center">
+                {"current price $" + String(price)}
+              </Text>
+            </View>
           </View>
         </View>
 
