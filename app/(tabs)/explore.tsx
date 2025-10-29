@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import { Link, useNavigation } from "expo-router";
+import { Link } from "expo-router";
 import { getTopMovers } from "@/api/alphaVantage";
 import StockCard from "@/components/StockCard";
 import LoadingErrorView from "@/components/LoadingErrorView";
@@ -9,8 +9,6 @@ export default function Explore() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
-
-  const router = useNavigation();
 
   useEffect(() => {
     load();
@@ -60,9 +58,12 @@ export default function Explore() {
     </View>
   );
 
+  if (loading || error) {
+    return <LoadingErrorView loading={loading} error={error} />;
+  }
+
   return (
     <View className="flex-1 bg-white px-4 pt-4">
-      <LoadingErrorView loading={loading} error={error} />
       {!loading && data && (
         <ScrollView>
           {renderSection("Top Gainers", data.top_gainers)}

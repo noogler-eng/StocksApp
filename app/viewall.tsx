@@ -11,31 +11,39 @@ import { Ionicons } from "@expo/vector-icons";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { getTopMovers } from "@/api/alphaVantage";
 import StockCard from "@/components/StockCard";
+import LoadingErrorView from "@/components/LoadingErrorView";
 
 export default function ViewAll() {
   const { title } = useLocalSearchParams();
   const router = useRouter();
 
-  const [loading, setLoading] = useState(true);
   const [stocks, setStocks] = useState<any[]>([]);
   const [filtered, setFiltered] = useState<any[]>([]);
   const [query, setQuery] = useState("");
 
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const data = await getTopMovers();
-      if (data?.top_gainers || data?.top_losers) {
-        const list =
-          title === "Top Gainers"
-            ? data.top_gainers
-            : title === "Top Losers"
-              ? data.top_losers
-              : data.most_actively_traded;
-        setStocks(list);
-        setFiltered(list);
+      try {
+        const data = await getTopMovers();
+        if (data?.top_gainers || data?.top_losers) {
+          const list =
+            title === "Top Gainers"
+              ? data.top_gainers
+              : title === "Top Losers"
+                ? data.top_losers
+                : data.most_actively_traded;
+          setStocks(list);
+          setFiltered(list);
+        }
+      } catch (err: any) {
+        setError(err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchData();
   }, [title]);
@@ -48,6 +56,10 @@ export default function ViewAll() {
     setFiltered(filteredList);
   };
 
+  if (loading || error) {
+    return <LoadingErrorView loading={loading} error={error} />;
+  }
+
   return (
     <View className="flex-1 bg-white">
       <View className="flex-row items-center gap-3 px-4 py-3 border-b border-gray-200">
@@ -57,10 +69,9 @@ export default function ViewAll() {
         <Text className="text-xl font-bold text-gray-900">
           {title || "View All"}
         </Text>
-        <View style={{ width: 22 }} /> {/* spacer */}
+        <View style={{ width: 22 }} />
       </View>
 
-      {/* Search Field */}
       <View className="flex-row items-center bg-gray-100 mx-4 mt-3 px-3 py-2 rounded-xl">
         <Ionicons name="search" size={18} color="#888" />
         <TextInput
@@ -72,7 +83,6 @@ export default function ViewAll() {
         />
       </View>
 
-      {/* Loading State */}
       {loading ? (
         <View className="flex-1 justify-center items-center">
           <ActivityIndicator size="large" color="#000" />

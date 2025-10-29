@@ -1,64 +1,61 @@
 import React, { useEffect, useRef } from "react";
-import { View, Text, ActivityIndicator, Animated } from "react-native";
+import { View, Text, Animated, Easing } from "react-native";
 
 export default function LoadingErrorView({ loading, error }: any) {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    // Fade in on mount
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 600,
+      easing: Easing.out(Easing.ease),
       useNativeDriver: true,
     }).start();
 
-    // Continuous pulsing for loading
     if (loading) {
-      Animated.loop(
+      const loop = Animated.loop(
         Animated.sequence([
           Animated.timing(pulseAnim, {
             toValue: 1.1,
-            duration: 800,
+            duration: 900,
+            easing: Easing.inOut(Easing.ease),
             useNativeDriver: true,
           }),
           Animated.timing(pulseAnim, {
             toValue: 1,
-            duration: 800,
+            duration: 900,
+            easing: Easing.inOut(Easing.ease),
             useNativeDriver: true,
           }),
         ])
-      ).start();
+      );
+      loop.start();
+      return () => loop.stop();
     }
   }, [loading]);
 
   if (loading)
     return (
       <View className="flex-1 items-center justify-center">
-        <Animated.View
-          style={{
-            opacity: fadeAnim,
-            transform: [{ scale: pulseAnim }],
-          }}
-          className="items-center"
-        >
-          <ActivityIndicator size="large" color="#A1A1AA" />
-          <Text className="text-gray-400 text-lg mt-4 font-semibold">
-            Loading...
-          </Text>
-        </Animated.View>
+        <View className="flex items-start">
+          <Text className="text-black text-4xl font-bold">Loading</Text>
+          <Text className="text-xl font-bold">Wait A moment...</Text>
+        </View>
       </View>
     );
 
   if (error)
     return (
-      <View className="flex-1 items-center justify-center bg-black">
-        <Animated.View style={{ opacity: fadeAnim }} className="items-center">
-          <Text className="text-red-500 text-lg font-semibold">
-            Error Occurred
-          </Text>
-          <Text className="text-gray-500 mt-2 text-sm px-4 text-center">
-            {error.message}
+      <View className="flex-1 items-center justify-center px-8 bg-white">
+        <Animated.View
+          style={{ opacity: fadeAnim }}
+          className="flex items-start"
+        >
+          <Text className="text-black text-4xl font-bold">Oops!</Text>
+          <Text className="text-xl font-bold">Something went wrong</Text>
+          <Text className="text-gray-400 mt-3 text-center text-base leading-5">
+            {error.message || "Unable to load data. Please try again later."}
           </Text>
         </Animated.View>
       </View>

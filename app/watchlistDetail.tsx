@@ -25,7 +25,7 @@ export default function WatchlistDetail() {
     setRefreshing(false);
   };
 
-  console.log(stocks)
+  console.log(stocks);
 
   return (
     <View className="flex-1 bg-white px-5 pt-6">
