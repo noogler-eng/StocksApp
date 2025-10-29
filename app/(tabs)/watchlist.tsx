@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, Text } from "react-native";
+import { View, FlatList, Text, TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { getAll } from "@/storage/watchlistStorage";
-import StockCard from "@/components/StockCard";
 import { useRouter } from "expo-router";
 
 export default function WatchlistScreen() {
-  const [stocks, setStocks] = useState<string[]>([]);
+  const [lists, setLists] = useState<{ [key: string]: any[] }>({});
   const router = useRouter();
 
   useEffect(() => {
@@ -14,35 +14,43 @@ export default function WatchlistScreen() {
 
   const loadData = async () => {
     const data = await getAll();
-    // Flatten all symbols from all watchlists into one array (unique only)
-    const allSymbols = Object.values(data).flat();
-    const uniqueSymbols: any = Array.from(new Set(allSymbols));
-    setStocks(uniqueSymbols);
+    setLists(data);
   };
 
-  return (
-    <View style={{ flex: 1, padding: 16, backgroundColor: "#fff" }}>
-      <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 12 }}>
-        Your Watchlist
-      </Text>
+  const handleListPress = (listName: string) => {
+    router.push({
+      pathname: "/watchlistDetail",
+      params: { name: listName },
+    });
+  };
 
-      {stocks.length === 0 ? (
-        <Text style={{ color: "#666", textAlign: "center", marginTop: 40 }}>
-          No stocks added yet. Go to Explore and add some!
+  const renderItem = ({ item }: { item: string }) => (
+    <TouchableOpacity
+      onPress={() => handleListPress(item)}
+      className="flex-row items-center justify-between bg-gray-100 p-4 rounded-xl mb-3"
+    >
+      <View>
+        <Text className="text-lg font-semibold text-gray-800">{item}</Text>
+        <Text className="text-sm text-gray-500">
+          {lists[item]?.length || 0} stocks
+        </Text>
+      </View>
+      <Ionicons name="chevron-forward" size={22} color="#888" />
+    </TouchableOpacity>
+  );
+
+  return (
+    <View className="flex-1 bg-white p-5">
+      {Object.keys(lists).length === 0 ? (
+        <Text className="text-gray-500 text-center mt-10">
+          You haven’t created any watchlists yet.
         </Text>
       ) : (
         <FlatList
-          data={stocks}
+          data={Object.keys(lists)}
           keyExtractor={(item) => item}
-          numColumns={2}
-          renderItem={({ item }) => (
-            <StockCard
-              symbol={item}
-              price={"—"} 
-              onPress={() => router.push(`/product/${item}`)}
-            />
-          )}
-          columnWrapperStyle={{ justifyContent: "space-between" }}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
         />
       )}
     </View>

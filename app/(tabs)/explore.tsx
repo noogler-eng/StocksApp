@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import { Link } from "expo-router";
+import { Link, useNavigation } from "expo-router";
 import { getTopMovers } from "@/api/alphaVantage";
 import StockCard from "@/components/StockCard";
 import LoadingErrorView from "@/components/LoadingErrorView";
@@ -9,6 +9,8 @@ export default function Explore() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
+
+  const router = useNavigation();
 
   useEffect(() => {
     load();
@@ -43,17 +45,17 @@ export default function Explore() {
         </Link>
       </View>
       <View className="flex flex-row flex-wrap justify-between px-4">
-        {list.slice(0, 4).map((item) => (
-          <Link key={item.ticker} href={`/product/${item.ticker}`} asChild>
-            <TouchableOpacity className="w-[48%] mb-4">
+        {list.slice(0, 4).map((item) => {
+          return (
+            <TouchableOpacity className="w-[48%] mb-4" key={item.ticker}>
               <StockCard
                 symbol={item.ticker}
                 price={item.price}
                 change={item.change_percentage}
               />
             </TouchableOpacity>
-          </Link>
-        ))}
+          );
+        })}
       </View>
     </View>
   );

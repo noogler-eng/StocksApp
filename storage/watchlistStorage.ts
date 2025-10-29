@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
 const KEY = "WATCHLISTS";
 
 export const getAll = async () => {
@@ -6,23 +7,44 @@ export const getAll = async () => {
   return s ? JSON.parse(s) : {};
 };
 
-export const addStock = async (listName: any, symbol: any) => {
-  const data = await getAll();
-  if (!data[listName]) data[listName] = [];
-  if (!data[listName].includes(symbol)) data[listName].push(symbol);
-  await AsyncStorage.setItem(KEY, JSON.stringify(data));
-};
-
-export const createList = async (name: any) => {
+export const createList = async (name: string) => {
   const data = await getAll();
   if (!data[name]) data[name] = [];
   await AsyncStorage.setItem(KEY, JSON.stringify(data));
 };
 
-export const removeStock = async (listName: any, symbol: any) => {
+export const addStock = async (
+  listName: string,
+  symbol: string,
+  price: number
+) => {
+  const data = await getAll();
+  if (!data[listName]) data[listName] = [];
+
+  const alreadyExists = data[listName].some(
+    (item: any) => item.symbol === symbol
+  );
+
+  if (!alreadyExists) {
+    data[listName].push({ symbol, price });
+    await AsyncStorage.setItem(KEY, JSON.stringify(data));
+  }
+};
+
+export const removeStock = async (listName: string, symbol: string) => {
   const data = await getAll();
   if (data[listName]) {
-    data[listName] = data[listName].filter((s: any) => s !== symbol);
+    data[listName] = data[listName].filter(
+      (item: any) => item.symbol !== symbol
+    );
+    await AsyncStorage.setItem(KEY, JSON.stringify(data));
+  }
+};
+
+export const deleteList = async (listName: string) => {
+  const data = await getAll();
+  if (data[listName]) {
+    delete data[listName];
     await AsyncStorage.setItem(KEY, JSON.stringify(data));
   }
 };

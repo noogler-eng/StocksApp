@@ -19,7 +19,8 @@ export default function StockCard({
   const router = useRouter();
 
   const handlePress = () => {
-    router.push(`/product/${symbol}`);
+    const symbol_price = symbol + "_" + price;
+    router.push(`/product/${symbol_price}`);
   };
 
   const bgColor = getRandomColor();

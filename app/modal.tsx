@@ -1,10 +1,26 @@
-import React from "react";
-import { View, Text } from "react-native";
+import { Link } from 'expo-router';
+import { StyleSheet } from 'react-native';
 
-export default function ModalPage() {
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+
+export default function ModalScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fff" }}>
-      <Text>Modal popup works!</Text>
-    </View>
+    <ThemedView style={styles.container}>
+      <ThemedText type="title">This is a modal</ThemedText>
+    </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  link: {
+    marginTop: 15,
+    paddingVertical: 15,
+  },
+});

@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  ActivityIndicator,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, Text, ActivityIndicator, ScrollView } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { getOverview, getTimeSeries } from "@/api/alphaVantage";
-import { getAll, addStock, removeStock } from "@/storage/watchlistStorage";
+import { getOverview } from "@/api/alphaVantage";
 import FiftyTwoWeekRange from "@/components/FiftyTwoWeekRange";
 import Graph from "@/components/Graph";
+import WatchlistButton from "@/components/WatchlistButton";
 
 export default function ProductScreen() {
-  const { symbol } = useLocalSearchParams<{ symbol: string }>();
+  const { symbol_price } = useLocalSearchParams<{ symbol_price: string }>();
+
+  console.log("symbol_price param:", symbol_price); 
+
   const [chartTimeline, setChartTimeline] = useState<
     | "TIME_SERIES_INTRADAY"
     | "TIME_SERIES_DAILY"
@@ -25,15 +21,10 @@ export default function ProductScreen() {
     | "TIME_SERIES_MONTHLY_ADJUSTED"
   >("TIME_SERIES_DAILY");
   const [overview, setOverview] = useState<any>(null);
-  const [isInWatchlist, setIsInWatchlist] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // const { timeSeriesData, loading_, error }: any = UsePrices(
-  //   chartTimeline,
-  //   symbol as string
-  // );
-
-  const listName = "Default";
+  const symbol = symbol_price.split("_")[0];
+  const price = symbol_price.split("_")[1];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,27 +39,8 @@ export default function ProductScreen() {
       }
     };
 
-    // checking wheather current stock is in watchlist
-    const checkWatchlist = async () => {
-      const all = await getAll();
-      const list = all[listName] || [];
-      setIsInWatchlist(list.includes(symbol));
-    };
-
     fetchData();
-    checkWatchlist();
   }, [symbol]);
-
-  const toggleWatchlist = async () => {
-    if (isInWatchlist) {
-      await removeStock(listName, symbol);
-    } else {
-      await addStock(listName, symbol);
-    }
-    const all = await getAll();
-    const list = all[listName] || [];
-    setIsInWatchlist(list.includes(symbol));
-  };
 
   if (loading) {
     return (
@@ -87,16 +59,7 @@ export default function ProductScreen() {
         <View>
           <Text className="text-3xl font-extrabold">Detailed Overview</Text>
         </View>
-        <TouchableOpacity
-          onPress={toggleWatchlist}
-          className="bg-blue-100 p-2 rounded-full"
-        >
-          <Ionicons
-            name={isInWatchlist ? "bookmark" : "bookmark-outline"}
-            size={26}
-            color="#007AFF"
-          />
-        </TouchableOpacity>
+        <WatchlistButton symbol={symbol} price={price} />
       </View>
 
       <View>
@@ -106,7 +69,11 @@ export default function ProductScreen() {
       </View>
 
       <View>
-        <Graph timeline={chartTimeline} symbol={symbol} setChartTimeline={setChartTimeline}/>
+        <Graph
+          timeline={chartTimeline}
+          symbol={symbol}
+          setChartTimeline={setChartTimeline}
+        />
       </View>
 
       <View className="border border-1 border-gray-200 rounded-lg p-4 mb-12">
@@ -127,7 +94,7 @@ export default function ProductScreen() {
           </View>
         </View>
 
-        <FiftyTwoWeekRange overview={overview} curr_price={"167.12"} />
+        <FiftyTwoWeekRange overview={overview} curr_price={price} />
 
         <View className="flex-row justify-between flex-wrap mt-12">
           <View className="flex border-r border-gray-300 pr-1">
