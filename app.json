@@ -23,6 +23,7 @@
       "predictiveBackGestureEnabled": false,
       "package": "com.x0xsharad.StockApp"
     },
+
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png",

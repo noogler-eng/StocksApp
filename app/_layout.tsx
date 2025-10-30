@@ -5,7 +5,7 @@ import { View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import * as NavigationBar from "expo-navigation-bar";
 import { useEffect } from "react";
-import { ThemeProvider, useTheme } from "@/context/ThemeContext"; // ✅ Import theme context
+import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 
 export const unstable_settings = {
   anchor: "(tabs)",

@@ -25,61 +25,117 @@ export default function Graph({
 }) {
   const [zoomLevel, setZoomLevel] = useState(1);
   const { data: selectedData, loading, error } = usePrices(timeline, symbol);
-
   const { isDark } = useTheme();
 
-  const bgColor = isDark ? "#0d0d0d" : "#ffffff";
+  // IMPORTANT: All hooks must be called before any conditional returns
   const textColor = isDark ? "#f5f5f5" : "#111827";
   const subTextColor = isDark ? "#9ca3af" : "#6b7280";
   const cardColor = isDark ? "#1c1c1e" : "#ffffff";
   const borderColor = isDark ? "#2a2a2d" : "#e5e7eb";
 
-  if (loading || error || !selectedData) {
-    return <LoadingErrorView loading={loading} error={error} />;
-  }
-
   const chartData = useMemo(() => {
-    const entries = Object.entries(selectedData);
-    const mapped = entries.map(([date, v]: any) => ({
-      date,
-      close: parseFloat(v.close),
-    }));
-    return mapped.reverse();
+    if (!selectedData) return [];
+
+    try {
+      const entries = Object.entries(selectedData);
+
+      if (entries.length === 0) {
+        return [];
+      }
+
+      const mapped = entries
+        .map(([date, v]: any) => {
+          // Handle both data formats
+          const closeValue = v.close || v["4. close"];
+          const parsedClose = parseFloat(closeValue);
+
+          // Validate the parsed value
+          if (isNaN(parsedClose)) {
+            console.warn(`Invalid close price for date ${date}:`, closeValue);
+            return null;
+          }
+
+          return {
+            date,
+            close: parsedClose,
+          };
+        })
+        .filter((item) => item !== null); // Remove invalid entries
+
+      return mapped.reverse();
+    } catch (err) {
+      console.error("Error processing chart data:", err);
+      return [];
+    }
   }, [selectedData]);
+
+  // Calculate max zoom based on available data
+  const maxZoom = useMemo(() => {
+    return Math.min(4, Math.max(1, Math.floor(chartData.length / 3)));
+  }, [chartData.length]);
 
   // Apply zoom by slicing data
   const visibleData = useMemo(() => {
-    const itemsToShow = Math.ceil(chartData.length / zoomLevel);
+    if (chartData.length === 0) return [];
+
+    const itemsToShow = Math.max(2, Math.ceil(chartData.length / zoomLevel));
     return chartData.slice(-itemsToShow); // Show most recent data
   }, [chartData, zoomLevel]);
 
   const prices = visibleData.map((item) => item.close);
   const dates = visibleData.map((item) => item.date);
 
-  if (!chartData.length) {
+  // NOW it's safe to do conditional returns after all hooks are called
+  if (loading || error || !selectedData) {
+    return <LoadingErrorView loading={loading} error={error} />;
+  }
+
+  // Check for minimum data requirements
+  if (!chartData.length || chartData.length < 2) {
     return (
-      <View className="flex items-center justify-center h-40">
-        <Text style={{ color: subTextColor, marginTop: 8, fontSize: 12 }}>
-          No chart data available
-        </Text>
+      <View
+        style={{
+          backgroundColor: cardColor,
+          borderRadius: 16,
+          padding: 16,
+          marginTop: 16,
+        }}
+      >
+        <View className="flex items-center justify-center h-40">
+          <Text style={{ color: textColor, fontSize: 16, fontWeight: "600" }}>
+            No Chart Data
+          </Text>
+          <Text style={{ color: subTextColor, marginTop: 8, fontSize: 12 }}>
+            {chartData.length === 0
+              ? "No data available for this timeline"
+              : "Need at least 2 data points to display chart"}
+          </Text>
+        </View>
       </View>
     );
   }
 
   // Format date labels based on timeline
   const formatDateLabel = (dateStr: string, index: number) => {
-    const step = Math.max(1, Math.ceil(dates.length / 5));
-    if (index % step !== 0) return "";
+    try {
+      const step = Math.max(1, Math.ceil(dates.length / 5));
+      if (index % step !== 0 && dates.length > 10) return "";
 
-    if (timeline === "TIME_SERIES_INTRADAY") {
-      return dateStr.slice(11, 16);
-    } else if (
-      timeline === "TIME_SERIES_MONTHLY" ||
-      timeline === "TIME_SERIES_MONTHLY_ADJUSTED"
-    ) {
-      return dateStr.slice(5, 7);
-    } else {
-      return dateStr.slice(5, 10);
+      if (timeline === "TIME_SERIES_INTRADAY") {
+        // Show time (HH:MM)
+        return dateStr.length >= 16 ? dateStr.slice(11, 16) : dateStr;
+      } else if (
+        timeline === "TIME_SERIES_MONTHLY" ||
+        timeline === "TIME_SERIES_MONTHLY_ADJUSTED"
+      ) {
+        // Show year-month (YYYY-MM)
+        return dateStr.length >= 7 ? dateStr.slice(0, 7) : dateStr.slice(5, 7);
+      } else {
+        // Show month-day (MM-DD)
+        return dateStr.length >= 10 ? dateStr.slice(5, 10) : dateStr;
+      }
+    } catch (err) {
+      return "";
     }
   };
 
@@ -123,11 +179,8 @@ export default function Graph({
             labels: dates.map((d, i) => formatDateLabel(d, i)),
             datasets: [
               {
-                data: prices,
-                color: (opacity = 1) =>
-                  isDark
-                    ? `rgba(249, 115, 22, ${opacity})`
-                    : `rgba(249, 115, 22, ${opacity})`,
+                data: prices.length > 0 ? prices : [0, 1], // Fallback to prevent crash
+                color: (opacity = 1) => `rgba(249, 115, 22, ${opacity})`,
                 strokeWidth: 2,
               },
             ],
@@ -167,34 +220,49 @@ export default function Graph({
       {/* Zoom Controls */}
       <View className="flex-row justify-center items-center gap-3 mt-3 mb-2">
         <Text style={{ fontSize: 12, color: subTextColor }}>Zoom:</Text>
-        {[1, 2, 3, 4].map((level) => (
-          <TouchableOpacity
-            key={level}
-            onPress={() => setZoomLevel(level)}
-            style={{
-              backgroundColor:
-                zoomLevel === level
-                  ? "#f97316"
-                  : isDark
-                    ? "#2d2d2d"
-                    : "#e5e7eb",
-              paddingVertical: 4,
-              paddingHorizontal: 12,
-              borderRadius: 9999,
-            }}
-          >
-            <Text
+        {[1, 2, 3, 4].map((level) => {
+          const isDisabled = level > maxZoom;
+          return (
+            <TouchableOpacity
+              key={level}
+              onPress={() => !isDisabled && setZoomLevel(level)}
+              disabled={isDisabled}
               style={{
-                fontSize: 12,
-                fontWeight: "600",
-                color:
-                  zoomLevel === level ? "#fff" : isDark ? "#d1d5db" : "#374151",
+                backgroundColor: isDisabled
+                  ? isDark
+                    ? "#1a1a1a"
+                    : "#f3f4f6"
+                  : zoomLevel === level
+                    ? "#f97316"
+                    : isDark
+                      ? "#2d2d2d"
+                      : "#e5e7eb",
+                paddingVertical: 4,
+                paddingHorizontal: 12,
+                borderRadius: 9999,
+                opacity: isDisabled ? 0.5 : 1,
               }}
             >
-              {level}x
-            </Text>
-          </TouchableOpacity>
-        ))}
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontWeight: "600",
+                  color: isDisabled
+                    ? isDark
+                      ? "#4b5563"
+                      : "#9ca3af"
+                    : zoomLevel === level
+                      ? "#fff"
+                      : isDark
+                        ? "#d1d5db"
+                        : "#374151",
+                }}
+              >
+                {level}x
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
 
       {/* Timeline Buttons */}

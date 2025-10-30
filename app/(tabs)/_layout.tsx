@@ -65,9 +65,8 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
       }}
     >
-      {/* ===== Home Tab ===== */}
       <Tabs.Screen
-        name="explore"
+        name="index"
         options={{
           title: "Home",
           tabBarIcon: () => null,
@@ -94,7 +93,6 @@ export default function TabLayout() {
         }}
       />
 
-      {/* ===== Watchlist Tab ===== */}
       <Tabs.Screen
         name="watchlist"
         options={{
