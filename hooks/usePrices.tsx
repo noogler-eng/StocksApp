@@ -21,17 +21,21 @@ export default function usePrices(
     const fetchData = async () => {
       try {
         setLoading(true);
+        const res = await axios.get(
+          `https://www.alphavantage.co/query?function=${timePeriod}&symbol=${symbol}&outputsize=full&apikey=${process.env.STOCK_DATA_API_KEY}`
+        );
 
-        if (!process.env.STOCK_DATA_API_KEY) {
+        if (
+          res.data?.["Error Message"] ||
+          res?.data?.["Information"] ||
+          !process.env.STOCK_DATA_API_KEY
+        ) {
           setData(timeData[timePeriod]);
           setError(null);
           setLoading(false);
           return { data, loading, error };
         }
 
-        const res = await axios.get(
-          `https://www.alphavantage.co/query?function=${timePeriod}&symbol=${symbol}&outputsize=full&apikey=${process.env.STOCK_DATA_API_KEY}`
-        );
         setData(res.data);
         setError(null);
       } catch (err) {

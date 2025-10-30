@@ -19,13 +19,18 @@ export default function useTopMovers() {
         };
         const res = await axios.get(BASE, { params });
 
-        if (res.data?.["Error Message"] || !process.env.STOCK_DATA_API_KEY) {
+        if (
+          res.data?.["Error Message"] ||
+          res?.data?.["Information"] ||
+          !process.env.STOCK_DATA_API_KEY
+        ) {
           console.warn("AlphaVantage limit reached, using demo data.");
           setData(demoData);
           setError(null);
           return;
         }
 
+        console.log("Fetched top movers data:", res.data);
         setData(res.data);
         setError(null);
       } catch (err) {

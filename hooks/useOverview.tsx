@@ -25,7 +25,11 @@ export default function useOverview(symbol: string) {
         console.log(`AlphaVantage Overview (${symbol}) Response:`, res.data);
 
         // Handle API rate limit or data errors
-        if (res.data?.["Error Message"] || !process.env.STOCK_DATA_API_KEY) {
+        if (
+          res.data?.["Error Message"] ||
+          res?.data?.["Information"] ||
+          !process.env.STOCK_DATA_API_KEY
+        ) {
           console.warn(
             "AlphaVantage limit reached or invalid response — using demo data."
           );
