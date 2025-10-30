@@ -65,14 +65,14 @@ export default function Graph({
     if (index % step !== 0) return "";
 
     if (timeline === "TIME_SERIES_INTRADAY") {
-      return dateStr.slice(11, 16); // HH:MM
+      return dateStr.slice(11, 16);
     } else if (
       timeline === "TIME_SERIES_MONTHLY" ||
       timeline === "TIME_SERIES_MONTHLY_ADJUSTED"
     ) {
-      return dateStr.slice(5, 7); // MM
+      return dateStr.slice(5, 7); 
     } else {
-      return dateStr.slice(5, 10); // MM-DD
+      return dateStr.slice(5, 10);
     }
   };
 
@@ -86,13 +86,6 @@ export default function Graph({
 
   // Calculate chart dimensions based on zoom
   const chartWidth = SCREEN_WIDTH - 60 + (zoomLevel - 1) * (SCREEN_WIDTH - 60);
-
-  // Calculate Y-axis range for better scaling
-  const minPrice = Math.min(...prices);
-  const maxPrice = Math.max(...prices);
-  const priceRange = maxPrice - minPrice;
-  const yAxisMin = minPrice - priceRange * 0.1;
-  const yAxisMax = maxPrice + priceRange * 0.1;
 
   return (
     <View className="bg-white rounded-2xl shadow p-4 mt-4">

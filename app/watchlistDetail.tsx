@@ -3,6 +3,7 @@ import { View, Text, FlatList, RefreshControl } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { getAll } from "@/storage/watchlistStorage";
 import StockCard from "@/components/StockCard";
+import LoadingErrorView from "@/components/LoadingErrorView";
 
 export default function WatchlistDetail() {
   const { name } = useLocalSearchParams<{ name: string }>();
@@ -15,7 +16,7 @@ export default function WatchlistDetail() {
 
   const loadData = async () => {
     const data = await getAll();
-    const list = data[name] || [];
+    const list = data[name] || [];  
     setStocks(list);
   };
 
@@ -25,7 +26,9 @@ export default function WatchlistDetail() {
     setRefreshing(false);
   };
 
-  console.log(stocks);
+  if (refreshing) {
+    return <LoadingErrorView loading={refreshing} error={null} />;
+  }
 
   return (
     <View className="flex-1 bg-white px-5 pt-6">

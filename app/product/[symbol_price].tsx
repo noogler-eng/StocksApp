@@ -13,8 +13,6 @@ import Avtaar from "@/components/Avtaar";
 export default function ProductScreen() {
   const { symbol_price } = useLocalSearchParams<{ symbol_price: string }>();
 
-  console.log("symbol_price param:", symbol_price);
-
   const [chartTimeline, setChartTimeline] =
     useState<TimelineType>("TIME_SERIES_DAILY");
   const [overview, setOverview] = useState<any>(null);
@@ -63,8 +61,13 @@ export default function ProductScreen() {
         <View className="flex-row items-center justify-between w-5/6 p-4">
           <View className="flex items-start">
             <Text className="text-xl font-bold">{symbol}</Text>
-            <Text className=" text-gray-500">{overview.Name}</Text>
-            <Text className="">{overview.Exchange}</Text>
+            <Text className=" text-gray-500 text-sm">
+              {overview.Name.slice(
+                0,
+                overview.Name.length > 15 ? 15 : overview.Name.length
+              )}
+            </Text>
+            <Text className="text-sm">{overview.Exchange}</Text>
           </View>
           <View>
             <Text className="text-xl font-bold">${price}</Text>
