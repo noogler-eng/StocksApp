@@ -1,31 +1,86 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { HapticTab } from "@/components/haptic-tab";
-import { Text, TextInput, View } from "react-native";
+import {
+  Text,
+  TextInput,
+  View,
+  useColorScheme,
+  StyleSheet,
+} from "react-native";
 
 export default function TabLayout() {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
+
+  const styles = StyleSheet.create({
+    headerContainer: {
+      backgroundColor: isDark ? "#0D0D0D" : "#FFFFFF",
+      borderBottomWidth: 1,
+      borderBottomColor: isDark ? "#333" : "#E0E0E0",
+      paddingHorizontal: 16,
+      paddingVertical: 12,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    title: {
+      fontSize: 24,
+      fontWeight: "800",
+      color: isDark ? "#FFFFFF" : "#000000",
+    },
+    searchBox: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: isDark ? "#1E1E1E" : "#F2F2F2",
+      paddingHorizontal: 12,
+      paddingVertical: 6,
+      borderRadius: 12,
+      width: "50%",
+    },
+    searchInput: {
+      marginLeft: 8,
+      flex: 1,
+      fontSize: 16,
+      color: isDark ? "#FFFFFF" : "#000000",
+    },
+    watchlistHeader: {
+      backgroundColor: isDark ? "#0D0D0D" : "#FFFFFF",
+      borderBottomWidth: 1,
+      borderBottomColor: isDark ? "#333" : "#E0E0E0",
+      paddingHorizontal: 16,
+      paddingVertical: 12,
+    },
+    watchlistTitle: {
+      fontSize: 24,
+      fontWeight: "700",
+      color: isDark ? "#FFFFFF" : "#000000",
+    },
+  });
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "black",
-        tabBarButton: HapticTab,
+        tabBarActiveTintColor: isDark ? "#FFFFFF" : "#000000",
+        tabBarInactiveTintColor: isDark ? "#AAAAAA" : "#666666",
         tabBarStyle: {
           borderTopWidth: 1,
+          borderTopColor: isDark ? "#333" : "#E0E0E0",
+          backgroundColor: isDark ? "#0D0D0D" : "#FFFFFF",
           elevation: 0,
-          paddingBottom: 0,
+          height: 80,
         },
         tabBarItemStyle: {
-          alignItems: "center",
           justifyContent: "center",
-          borderRightWidth: 1,
-          borderRightColor: "#e0e0e0",
+          alignItems: "center",
         },
         tabBarLabelStyle: {
-          textAlignVertical: "center",
-          textAlign: "center",
           fontSize: 16,
-          fontWeight: "bold",
+          fontWeight: "700",
+          marginTop: 0,
+          marginBottom: 0,
         },
+        tabBarButton: HapticTab,
       }}
     >
       <Tabs.Screen
@@ -35,16 +90,13 @@ export default function TabLayout() {
           tabBarIcon: () => null,
           headerShown: true,
           header: () => (
-            <View className="bg-white px-4 py-3 border-b border-gray-200 flex-row justify-between items-center">
-              <Text className="text-2xl font-extrabold text-black">
-                Stock App
-              </Text>
-
-              <View className="flex-row items-center bg-gray-100 px-3 py-1 rounded-xl w-1/2">
+            <View style={styles.headerContainer}>
+              <Text style={styles.title}>Stock App</Text>
+              <View style={styles.searchBox}>
                 <TextInput
                   placeholder="Search here..."
-                  placeholderTextColor="#888"
-                  className="ml-2 flex-1 text-base text-black"
+                  placeholderTextColor={isDark ? "#AAA" : "#888"}
+                  style={styles.searchInput}
                 />
               </View>
             </View>
@@ -59,10 +111,8 @@ export default function TabLayout() {
           tabBarIcon: () => null,
           headerShown: true,
           header: () => (
-            <View>
-              <Text className="text-2xl font-bold text-black bg-white px-4 py-3 border-b border-gray-200">
-                Watchlist's
-              </Text>
+            <View style={styles.watchlistHeader}>
+              <Text style={styles.watchlistTitle}>Watchlist's</Text>
             </View>
           ),
         }}

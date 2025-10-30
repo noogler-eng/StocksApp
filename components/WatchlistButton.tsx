@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
+  useColorScheme,
 } from "react-native";
 import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
-import { getAll, addStock, createList } from "@/storage/watchlistStorage"; // <-- your file path
+import { getAll, addStock, createList } from "@/storage/watchlistStorage";
 
 export default function WatchlistButton({ symbol, price }: any) {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -16,6 +17,9 @@ export default function WatchlistButton({ symbol, price }: any) {
   const [watchlists, setWatchlists] = useState<{ [key: string]: any[] }>({});
   const [newListName, setNewListName] = useState("");
   const [showCreateInput, setShowCreateInput] = useState(false);
+
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
 
   const loadWatchlists = async () => {
     const data = await getAll();
@@ -44,27 +48,45 @@ export default function WatchlistButton({ symbol, price }: any) {
     setIsInWatchlist(true);
   };
 
+  // 🎨 OLED-Optimized Dark Mode Colors
+  const bgColor = isDark ? "#000000" : "#FFFFFF";
+  const cardColor = isDark ? "#111111" : "#F3F4F6";
+  const textColor = isDark ? "#FFFFFF" : "#111827";
+  const placeholderColor = isDark ? "#6B7280" : "#9CA3AF";
+  const borderColor = isDark ? "#1F2937" : "#E5E7EB";
+
   return (
     <View>
+      {/* Floating Bookmark Button */}
       <TouchableOpacity
         onPress={toggleWatchlist}
-        className="bg-blue-100 p-2 rounded-full"
+        className={`p-2 rounded-full border ${
+          isDark ? "border-gray-700 bg-black" : "border-gray-300 bg-gray-100"
+        } active:bg-neutral-800`}
       >
         <Ionicons
           name={isInWatchlist ? "bookmark" : "bookmark-outline"}
           size={26}
-          color="#007AFF"
+          color={isInWatchlist ? "#3B82F6" : isDark ? "#9CA3AF" : "#475569"}
         />
       </TouchableOpacity>
 
+      {/* Bottom Sheet Modal */}
       <Modal
         isVisible={isModalVisible}
         onBackdropPress={() => setModalVisible(false)}
+        backdropTransitionOutTiming={0}
         style={{ justifyContent: "flex-end", margin: 0 }}
       >
-        <View className="bg-white rounded-t-2xl p-6 max-h-[60%]">
-          <View className="border-b border-gray-200 pb-3 mb-3">
-            <Text className="text-lg font-semibold text-gray-800 text-center">
+        <View
+          style={{ backgroundColor: bgColor, borderColor }}
+          className="rounded-t-2xl p-6 max-h-[60%] border-t"
+        >
+          <View style={{ borderColor }} className="border-b pb-3 mb-4">
+            <Text
+              style={{ color: textColor }}
+              className="text-lg font-semibold text-center"
+            >
               Add to Watchlist
             </Text>
           </View>
@@ -76,44 +98,60 @@ export default function WatchlistButton({ symbol, price }: any) {
               renderItem={({ item }) => (
                 <TouchableOpacity
                   onPress={() => handleAddToList(item)}
-                  className="bg-gray-100 p-4 rounded-xl mb-3"
+                  style={{
+                    backgroundColor: cardColor,
+                    borderColor,
+                  }}
+                  className="p-4 rounded-xl mb-3 border active:bg-neutral-900"
                 >
-                  <Text className="text-gray-800 text-center text-base font-medium">
+                  <Text
+                    style={{ color: textColor }}
+                    className="text-center text-base font-medium"
+                  >
                     {item}
                   </Text>
                 </TouchableOpacity>
               )}
             />
           ) : (
-            <Text className="text-center text-gray-500 mb-3">
+            <Text
+              style={{ color: placeholderColor }}
+              className="text-center mb-3"
+            >
               No watchlists found.
             </Text>
           )}
 
-          {/* Toggle Create Input */}
+          {/* Create New Watchlist Section */}
           {showCreateInput ? (
             <View className="mt-4">
               <TextInput
                 value={newListName}
                 onChangeText={setNewListName}
                 placeholder="Enter new watchlist name"
-                className="border border-gray-300 rounded-xl p-3 mb-3"
+                placeholderTextColor={placeholderColor}
+                style={{
+                  color: textColor,
+                  borderColor,
+                  backgroundColor: isDark ? "#111111" : "#F9FAFB",
+                }}
+                className="border rounded-xl p-3 mb-3"
               />
               <TouchableOpacity
-                className="bg-blue-500 p-4 rounded-xl"
+                className="bg-blue-500 p-4 rounded-xl active:bg-blue-600"
                 onPress={handleCreateNewList}
               >
-                <Text className="text-white text-center text-base font-medium">
+                <Text className="text-white text-center text-base font-semibold">
                   Create & Add
                 </Text>
               </TouchableOpacity>
             </View>
           ) : (
             <TouchableOpacity
-              className="bg-blue-500 p-4 rounded-xl mt-3"
+              className="bg-blue-500 p-4 rounded-xl mt-3 active:bg-blue-600"
               onPress={() => setShowCreateInput(true)}
             >
-              <Text className="text-white text-center text-base font-medium">
+              <Text className="text-white text-center text-base font-semibold">
                 Create New Watchlist
               </Text>
             </TouchableOpacity>

@@ -1,63 +1,57 @@
-import React, { useEffect, useRef } from "react";
-import { View, Text, Animated, Easing } from "react-native";
+import React from "react";
+import { View, Text, useColorScheme } from "react-native";
 
 export default function LoadingErrorView({ loading, error }: any) {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
 
-  useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 600,
-      easing: Easing.out(Easing.ease),
-      useNativeDriver: true,
-    }).start();
-
-    if (loading) {
-      const loop = Animated.loop(
-        Animated.sequence([
-          Animated.timing(pulseAnim, {
-            toValue: 1.1,
-            duration: 900,
-            easing: Easing.inOut(Easing.ease),
-            useNativeDriver: true,
-          }),
-          Animated.timing(pulseAnim, {
-            toValue: 1,
-            duration: 900,
-            easing: Easing.inOut(Easing.ease),
-            useNativeDriver: true,
-          }),
-        ])
-      );
-      loop.start();
-      return () => loop.stop();
-    }
-  }, [loading]);
+  const backgroundColor = isDarkMode ? "#000" : "#fff";
+  const primaryText = isDarkMode ? "#fff" : "#000";
+  const secondaryText = isDarkMode ? "#ccc" : "#555";
 
   if (loading)
     return (
-      <View className="flex-1 items-center justify-center">
+      <View
+        className="flex-1 items-center justify-center"
+        style={{ backgroundColor }}
+      >
         <View className="flex items-start">
-          <Text className="text-black text-4xl font-bold">Loading</Text>
-          <Text className="text-xl font-bold">Wait A moment...</Text>
+          <Text style={{ color: primaryText }} className="text-4xl font-bold">
+            Loading
+          </Text>
+          <Text
+            style={{ color: secondaryText }}
+            className="text-xl font-semibold mt-1"
+          >
+            Wait a moment...
+          </Text>
         </View>
       </View>
     );
 
   if (error)
     return (
-      <View className="flex-1 items-center justify-center px-8 bg-white">
-        <Animated.View
-          style={{ opacity: fadeAnim }}
-          className="flex items-start"
-        >
-          <Text className="text-black text-4xl font-bold">Oops!</Text>
-          <Text className="text-xl font-bold">Something went wrong</Text>
-          <Text className="text-gray-400 mt-3 text-center text-base leading-5">
+      <View
+        className="flex-1 items-center justify-center px-8"
+        style={{ backgroundColor }}
+      >
+        <View className="flex items-start">
+          <Text style={{ color: primaryText }} className="text-4xl font-bold">
+            Oops!
+          </Text>
+          <Text
+            style={{ color: secondaryText }}
+            className="text-xl font-semibold mt-1"
+          >
+            Something went wrong
+          </Text>
+          <Text
+            style={{ color: secondaryText }}
+            className="mt-3 text-center text-base leading-5"
+          >
             {error.message || "Unable to load data. Please try again later."}
           </Text>
-        </Animated.View>
+        </View>
       </View>
     );
 

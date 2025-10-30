@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, useColorScheme } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import FiftyTwoWeekRange from "@/components/FiftyTwoWeekRange";
 import Graph from "@/components/Graph";
 import WatchlistButton from "@/components/WatchlistButton";
-
-import { TimelineType } from "@/utils/types";
 import LoadingErrorView from "@/components/LoadingErrorView";
 import Avtaar from "@/components/Avtaar";
 import useOverview from "@/hooks/useOverview";
+import { TimelineType } from "@/utils/types";
 
 export default function ProductScreen() {
   const { symbol_price } = useLocalSearchParams<{ symbol_price: string }>();
@@ -20,36 +19,77 @@ export default function ProductScreen() {
 
   const { data: overview, loading, error } = useOverview(symbol);
 
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
+
   if (loading || error || !overview) {
     return <LoadingErrorView loading={loading} error={error} />;
   }
 
   return (
     <ScrollView
-      className="flex-1 bg-white px-5"
+      className={`flex-1 px-5 ${isDark ? "bg-black" : "bg-white"}`}
       stickyHeaderIndices={[0]}
       showsVerticalScrollIndicator={false}
     >
-      <View className="flex-row items-center justify-between px-4 py-3 mb-2 border-b border-gray-300 bg-white">
-        <Text className="text-2xl font-extrabold">Detailed Overview</Text>
+      {/* Header */}
+      <View
+        className={`flex-row items-center justify-between px-4 py-3 mb-2 border-b ${
+          isDark ? "border-gray-700 bg-black" : "border-gray-300 bg-white"
+        }`}
+      >
+        <Text
+          className={`text-2xl font-extrabold ${
+            isDark ? "text-white" : "text-black"
+          }`}
+        >
+          Detailed Overview
+        </Text>
         <WatchlistButton symbol={symbol} price={price} />
       </View>
 
-      <View className="bg-white rounded-2xl p-4 shadow-lg my-4 flex-row items-center">
+      {/* Stock Info */}
+      <View
+        className={`rounded-2xl p-4 shadow-lg my-4 flex-row items-center ${
+          isDark ? "bg-neutral-900" : "bg-white"
+        }`}
+      >
         <Avtaar initials={symbol?.[0] ?? "?"} size={60} />
         <View className="flex-row items-center justify-between w-5/6 p-4">
           <View className="flex items-start">
-            <Text className="text-xl font-bold">{symbol}</Text>
-            <Text className=" text-gray-500 text-sm">
+            <Text
+              className={`text-xl font-bold ${
+                isDark ? "text-white" : "text-black"
+              }`}
+            >
+              {symbol}
+            </Text>
+            <Text
+              className={`text-sm ${
+                isDark ? "text-gray-400" : "text-gray-500"
+              }`}
+            >
               {overview.Name.slice(
                 0,
                 overview.Name.length > 15 ? 15 : overview.Name.length
               )}
             </Text>
-            <Text className="text-sm">{overview.Exchange}</Text>
+            <Text
+              className={`text-sm ${
+                isDark ? "text-gray-500" : "text-gray-500"
+              }`}
+            >
+              {overview.Exchange}
+            </Text>
           </View>
           <View>
-            <Text className="text-xl font-bold">${price}</Text>
+            <Text
+              className={`text-xl font-bold ${
+                isDark ? "text-white" : "text-black"
+              }`}
+            >
+              ${price}
+            </Text>
             <Text className="text-xs font-semibold text-green-400 mt-1">
               +0.00 (0.00%)
             </Text>
@@ -57,25 +97,56 @@ export default function ProductScreen() {
         </View>
       </View>
 
+      {/* Graph */}
       <Graph
         timeline={chartTimeline}
         symbol={symbol}
         setChartTimeline={setChartTimeline}
       />
 
-      <View className="border border-1 border-gray-200 rounded-lg p-4 mb-12">
-        <Text className="font-bold mb-3 text-xl">About {symbol}</Text>
-        <Text>{overview.Description}</Text>
+      {/* About Section */}
+      <View
+        className={`border rounded-lg p-4 mb-12 ${
+          isDark ? "bg-neutral-900 border-gray-800" : "bg-white border-gray-200"
+        }`}
+      >
+        <Text
+          className={`font-bold mb-3 text-xl ${
+            isDark ? "text-white" : "text-black"
+          }`}
+        >
+          About {symbol}
+        </Text>
+        <Text className={`${isDark ? "text-gray-300" : "text-gray-800"}`}>
+          {overview.Description}
+        </Text>
+
+        {/* Tags */}
         <View className="flex-row flex-wrap items-center justify-start gap-3 mt-3">
-          <View className="bg-orange-100 px-4 py-2 rounded-full">
-            <Text className="text-orange-700 font-semibold text-sm">
-              Industry:
-              <Text className="font-bold">{overview.Industry}</Text>
+          <View
+            className={`px-4 py-2 rounded-full ${
+              isDark ? "bg-orange-950" : "bg-orange-100"
+            }`}
+          >
+            <Text
+              className={`font-semibold text-sm ${
+                isDark ? "text-orange-400" : "text-orange-700"
+              }`}
+            >
+              Industry: <Text className="font-bold">{overview.Industry}</Text>
             </Text>
           </View>
 
-          <View className="bg-orange-100 px-4 py-2 rounded-full">
-            <Text className="text-orange-700 font-semibold text-sm">
+          <View
+            className={`px-4 py-2 rounded-full ${
+              isDark ? "bg-orange-950" : "bg-orange-100"
+            }`}
+          >
+            <Text
+              className={`font-semibold text-sm ${
+                isDark ? "text-orange-400" : "text-orange-700"
+              }`}
+            >
               Sector: <Text className="font-bold">{overview.Sector}</Text>
             </Text>
           </View>
@@ -83,29 +154,35 @@ export default function ProductScreen() {
 
         <FiftyTwoWeekRange overview={overview} price={price} />
 
+        {/* Stats */}
         <View className="flex-row justify-between flex-wrap mt-12">
-          <View className="flex border-r border-gray-300 pr-1">
-            <Text className="text-xs font-bold">Market Cap</Text>
-            <Text className="text-xs">
-              ${(overview.MarketCapitalization / 1000000000000).toFixed(2)}T
-            </Text>
-          </View>
-          <View className="flex border-r border-gray-300 pr-1">
-            <Text className="text-xs font-bold">Market Cap</Text>
-            <Text className="text-xs">{overview.PERatio}</Text>
-          </View>
-          <View className="flex border-r border-gray-300 pr-1">
-            <Text className="text-xs font-bold">Beta</Text>
-            <Text className="text-xs">{overview.Beta}</Text>
-          </View>
-          <View className="flex border-r border-gray-300 pr-1">
-            <Text className="text-xs font-bold">Dividend Yield</Text>
-            <Text className="text-xs">{overview.DividendYield}</Text>
-          </View>
-          <View>
-            <Text className="text-xs font-bold">Profit Margin</Text>
-            <Text className="text-xs">{overview.ProfitMargin}</Text>
-          </View>
+          {[
+            [
+              "Market Cap",
+              `$${(overview.MarketCapitalization / 1e12).toFixed(2)}T`,
+            ],
+            ["P/E Ratio", overview.PERatio],
+            ["Beta", overview.Beta],
+            ["Dividend Yield", overview.DividendYield],
+            ["Profit Margin", overview.ProfitMargin],
+          ].map(([label, value]) => (
+            <View key={label} className="flex border-r border-gray-700 pr-1">
+              <Text
+                className={`text-xs font-bold ${
+                  isDark ? "text-gray-400" : "text-gray-600"
+                }`}
+              >
+                {label}
+              </Text>
+              <Text
+                className={`text-xs ${
+                  isDark ? "text-gray-300" : "text-gray-800"
+                }`}
+              >
+                {value}
+              </Text>
+            </View>
+          ))}
         </View>
       </View>
     </ScrollView>
