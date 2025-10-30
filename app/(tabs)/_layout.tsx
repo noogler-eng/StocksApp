@@ -1,17 +1,16 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { HapticTab } from "@/components/haptic-tab";
-import {
-  Text,
-  TextInput,
-  View,
-  useColorScheme,
-  StyleSheet,
-} from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
+import { Moon, Sun } from "lucide-react-native";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { isDark, toggleTheme } = useTheme();
 
   const styles = StyleSheet.create({
     headerContainer: {
@@ -29,34 +28,19 @@ export default function TabLayout() {
       fontWeight: "800",
       color: isDark ? "#FFFFFF" : "#000000",
     },
-    searchBox: {
-      flexDirection: "row",
+    toggleButton: {
+      width: 48,
+      height: 48,
+      borderRadius: 24,
+      justifyContent: "center",
       alignItems: "center",
       backgroundColor: isDark ? "#1E1E1E" : "#F2F2F2",
-      paddingHorizontal: 12,
-      paddingVertical: 6,
-      borderRadius: 12,
-      width: "50%",
-    },
-    searchInput: {
-      marginLeft: 8,
-      flex: 1,
-      fontSize: 16,
-      color: isDark ? "#FFFFFF" : "#000000",
-    },
-    watchlistHeader: {
-      backgroundColor: isDark ? "#0D0D0D" : "#FFFFFF",
-      borderBottomWidth: 1,
-      borderBottomColor: isDark ? "#333" : "#E0E0E0",
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-    },
-    watchlistTitle: {
-      fontSize: 24,
-      fontWeight: "700",
-      color: isDark ? "#FFFFFF" : "#000000",
     },
   });
+
+  const iconStyle = useAnimatedStyle(() => ({
+    transform: [{ rotate: withTiming(isDark ? "180deg" : "0deg") }],
+  }));
 
   return (
     <Tabs
@@ -77,12 +61,11 @@ export default function TabLayout() {
         tabBarLabelStyle: {
           fontSize: 16,
           fontWeight: "700",
-          marginTop: 0,
-          marginBottom: 0,
         },
         tabBarButton: HapticTab,
       }}
     >
+      {/* ===== Home Tab ===== */}
       <Tabs.Screen
         name="explore"
         options={{
@@ -92,18 +75,26 @@ export default function TabLayout() {
           header: () => (
             <View style={styles.headerContainer}>
               <Text style={styles.title}>Stock App</Text>
-              <View style={styles.searchBox}>
-                <TextInput
-                  placeholder="Search here..."
-                  placeholderTextColor={isDark ? "#AAA" : "#888"}
-                  style={styles.searchInput}
-                />
-              </View>
+
+              <TouchableOpacity
+                onPress={toggleTheme}
+                activeOpacity={0.7}
+                style={styles.toggleButton}
+              >
+                <Animated.View style={iconStyle}>
+                  {isDark ? (
+                    <Sun size={26} color="#FFD700" />
+                  ) : (
+                    <Moon size={26} color="#000" />
+                  )}
+                </Animated.View>
+              </TouchableOpacity>
             </View>
           ),
         }}
       />
 
+      {/* ===== Watchlist Tab ===== */}
       <Tabs.Screen
         name="watchlist"
         options={{
@@ -111,8 +102,8 @@ export default function TabLayout() {
           tabBarIcon: () => null,
           headerShown: true,
           header: () => (
-            <View style={styles.watchlistHeader}>
-              <Text style={styles.watchlistTitle}>Watchlist's</Text>
+            <View style={styles.headerContainer}>
+              <Text style={styles.title}>Watchlist's</Text>
             </View>
           ),
         }}

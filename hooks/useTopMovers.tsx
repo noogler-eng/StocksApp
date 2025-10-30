@@ -30,7 +30,6 @@ export default function useTopMovers() {
           return;
         }
 
-        console.log("Fetched top movers data:", res.data);
         setData(res.data);
         setError(null);
       } catch (err) {

@@ -11,12 +11,12 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { deleteList, getAll } from "@/storage/watchlistStorage";
 import { useRouter, useFocusEffect } from "expo-router";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function WatchlistScreen() {
   const [lists, setLists] = useState<{ [key: string]: any[] }>({});
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { isDark } = useTheme();
 
   const styles = StyleSheet.create({
     container: {

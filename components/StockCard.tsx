@@ -1,13 +1,8 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  useColorScheme,
-  StyleSheet,
-} from "react-native";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import Avtaar from "./Avtaar";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function StockCard({
   symbol,
@@ -19,8 +14,7 @@ export default function StockCard({
   change?: number;
 }) {
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { isDark } = useTheme();
 
   const styles = StyleSheet.create({
     card: {

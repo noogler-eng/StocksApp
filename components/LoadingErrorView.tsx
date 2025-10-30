@@ -1,13 +1,13 @@
+import { useTheme } from "@/context/ThemeContext";
 import React from "react";
-import { View, Text, useColorScheme } from "react-native";
+import { View, Text } from "react-native";
 
 export default function LoadingErrorView({ loading, error }: any) {
-  const colorScheme = useColorScheme();
-  const isDarkMode = colorScheme === "dark";
+  const { isDark } = useTheme();
 
-  const backgroundColor = isDarkMode ? "#000" : "#fff";
-  const primaryText = isDarkMode ? "#fff" : "#000";
-  const secondaryText = isDarkMode ? "#ccc" : "#555";
+  const backgroundColor = isDark ? "#000" : "#fff";
+  const primaryText = isDark ? "#fff" : "#000";
+  const secondaryText = isDark ? "#ccc" : "#555";
 
   if (loading)
     return (

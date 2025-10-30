@@ -5,12 +5,12 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
-  useColorScheme,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import { TimelineType } from "@/utils/types";
 import usePrices from "@/hooks/usePrices";
 import LoadingErrorView from "./LoadingErrorView";
+import { useTheme } from "@/context/ThemeContext";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
@@ -26,8 +26,7 @@ export default function Graph({
   const [zoomLevel, setZoomLevel] = useState(1);
   const { data: selectedData, loading, error } = usePrices(timeline, symbol);
 
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { isDark } = useTheme();
 
   const bgColor = isDark ? "#0d0d0d" : "#ffffff";
   const textColor = isDark ? "#f5f5f5" : "#111827";

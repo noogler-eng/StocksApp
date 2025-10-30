@@ -1,18 +1,26 @@
 import "@/global.css";
 import { Stack } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useColorScheme, View } from "react-native";
+import { View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import * as NavigationBar from "expo-navigation-bar";
 import { useEffect } from "react";
+import { ThemeProvider, useTheme } from "@/context/ThemeContext"; // ✅ Import theme context
 
 export const unstable_settings = {
   anchor: "(tabs)",
 };
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  return (
+    <ThemeProvider>
+      <ThemedRootLayout />
+    </ThemeProvider>
+  );
+}
+
+function ThemedRootLayout() {
+  const { isDark } = useTheme();
   const backgroundColor = isDark ? "#000000" : "#FFFFFF";
 
   useEffect(() => {

@@ -1,5 +1,6 @@
+import { useTheme } from "@/context/ThemeContext";
 import React from "react";
-import { View, Text, useColorScheme } from "react-native";
+import { View, Text } from "react-native";
 
 export default function FiftyTwoWeekRange({ overview, price }: any) {
   const low = parseFloat(overview["52WeekLow"]);
@@ -8,8 +9,7 @@ export default function FiftyTwoWeekRange({ overview, price }: any) {
   // Normalize current price position (0 to 1)
   const position = Math.min(Math.max((price - low) / (high - low), 0), 1);
 
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { isDark } = useTheme();
 
   const textColor = isDark ? "#e5e7eb" : "#111827"; // main text
   const subTextColor = isDark ? "#9ca3af" : "#6b7280"; // label text

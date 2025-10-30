@@ -4,17 +4,16 @@ import {
   Text,
   FlatList,
   RefreshControl,
-  useColorScheme,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { getAll } from "@/storage/watchlistStorage";
 import StockCard from "@/components/StockCard";
 import LoadingErrorView from "@/components/LoadingErrorView";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function WatchlistDetail() {
   const { name } = useLocalSearchParams<{ name: string }>();
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { isDark } = useTheme();
 
   const [stocks, setStocks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);

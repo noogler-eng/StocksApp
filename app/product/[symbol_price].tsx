@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, useColorScheme } from "react-native";
+import React, { useState } from "react";
+import { View, Text, ScrollView } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import FiftyTwoWeekRange from "@/components/FiftyTwoWeekRange";
 import Graph from "@/components/Graph";
@@ -8,6 +8,7 @@ import LoadingErrorView from "@/components/LoadingErrorView";
 import Avtaar from "@/components/Avtaar";
 import useOverview from "@/hooks/useOverview";
 import { TimelineType } from "@/utils/types";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function ProductScreen() {
   const { symbol_price } = useLocalSearchParams<{ symbol_price: string }>();
@@ -19,8 +20,7 @@ export default function ProductScreen() {
 
   const { data: overview, loading, error } = useOverview(symbol);
 
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { isDark } = useTheme();
 
   if (loading || error || !overview) {
     return <LoadingErrorView loading={loading} error={error} />;

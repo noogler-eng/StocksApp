@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   ScrollView,
-  useColorScheme,
   StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -14,12 +13,12 @@ import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import StockCard from "@/components/StockCard";
 import LoadingErrorView from "@/components/LoadingErrorView";
 import useTopMovers from "@/hooks/useTopMovers";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function ViewAll() {
   const { title } = useLocalSearchParams();
   const router = useRouter();
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { isDark } = useTheme();
 
   const [stocks, setStocks] = useState<any[]>([]);
   const [filtered, setFiltered] = useState<any[]>([]);

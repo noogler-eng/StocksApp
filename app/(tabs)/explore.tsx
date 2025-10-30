@@ -1,21 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   ScrollView,
-  useColorScheme,
   StyleSheet,
 } from "react-native";
 import { Link } from "expo-router";
 import StockCard from "@/components/StockCard";
 import LoadingErrorView from "@/components/LoadingErrorView";
 import useTopMovers from "@/hooks/useTopMovers";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function Explore() {
+  const { isDark } = useTheme();
   const { data, loading, error } = useTopMovers();
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
 
   const styles = StyleSheet.create({
     container: {
@@ -62,7 +61,7 @@ export default function Explore() {
           href={{
             pathname: "/viewall",
             params: {
-              title: title,
+              title,
               type: title.replace(" ", "_").toLowerCase(),
             },
           }}
@@ -71,7 +70,7 @@ export default function Explore() {
         </Link>
       </View>
       <View style={styles.grid}>
-        {list.slice(0, list.length > 4 ? 4 : list.length).map((item) => (
+        {list.slice(0, Math.min(4, list.length)).map((item) => (
           <TouchableOpacity className="w-[48%] mb-4" key={item.ticker}>
             <StockCard
               symbol={item.ticker}

@@ -5,11 +5,11 @@ import {
   TouchableOpacity,
   TextInput,
   FlatList,
-  useColorScheme,
 } from "react-native";
 import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
 import { getAll, addStock, createList } from "@/storage/watchlistStorage";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function WatchlistButton({ symbol, price }: any) {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -18,8 +18,7 @@ export default function WatchlistButton({ symbol, price }: any) {
   const [newListName, setNewListName] = useState("");
   const [showCreateInput, setShowCreateInput] = useState(false);
 
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
+  const { isDark } = useTheme();
 
   const loadWatchlists = async () => {
     const data = await getAll();
