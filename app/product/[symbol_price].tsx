@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import { getOverview } from "@/api/alphaVantage";
 import FiftyTwoWeekRange from "@/components/FiftyTwoWeekRange";
 import Graph from "@/components/Graph";
 import WatchlistButton from "@/components/WatchlistButton";
@@ -9,39 +8,19 @@ import WatchlistButton from "@/components/WatchlistButton";
 import { TimelineType } from "@/utils/types";
 import LoadingErrorView from "@/components/LoadingErrorView";
 import Avtaar from "@/components/Avtaar";
+import useOverview from "@/hooks/useOverview";
 
 export default function ProductScreen() {
   const { symbol_price } = useLocalSearchParams<{ symbol_price: string }>();
-
-  const [chartTimeline, setChartTimeline] =
-    useState<TimelineType>("TIME_SERIES_DAILY");
-  const [overview, setOverview] = useState<any>(null);
-
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
-  // Extract symbol and price from the parameter
   const symbol = symbol_price.split("_")[0];
   const price = symbol_price.split("_")[1];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const overviewData = await getOverview(symbol);
-        setOverview(overviewData);
-      } catch (err) {
-        console.error("Speicifc stock component: ", err);
-        setError(err as Error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const [chartTimeline, setChartTimeline] =
+    useState<TimelineType>("TIME_SERIES_DAILY");
 
-    fetchData();
-  }, [symbol]);
+  const { data: overview, loading, error } = useOverview(symbol);
 
-  if (loading || error) {
+  if (loading || error || !overview) {
     return <LoadingErrorView loading={loading} error={error} />;
   }
 

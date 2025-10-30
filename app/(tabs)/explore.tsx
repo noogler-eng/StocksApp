@@ -1,30 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { Link } from "expo-router";
-import { getTopMovers } from "@/api/alphaVantage";
+// import { getTopMovers } from "@/api/alphaVantage";
 import StockCard from "@/components/StockCard";
 import LoadingErrorView from "@/components/LoadingErrorView";
+import useTopMovers from "@/hooks/useTopMovers";
 
 export default function Explore() {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<any>(null);
+  const { data, loading, error } = useTopMovers();
 
-  useEffect(() => {
-    load();
-  }, []);
-
-  const load = async () => {
-    setLoading(true);
-    try {
-      const res = await getTopMovers();
-      setData(res);
-    } catch (e) {
-      setError(e);
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (loading || error || !data) {
+    return <LoadingErrorView loading={loading} error={error} />;
+  }
 
   const renderSection = (title: string, list: any[]) => (
     <View style={{ marginBottom: 24 }}>
@@ -43,7 +30,7 @@ export default function Explore() {
         </Link>
       </View>
       <View className="flex flex-row flex-wrap justify-between px-4">
-        {list.slice(0, 4).map((item) => {
+        {list.slice(0, list.length > 4 ? 4 : list.length).map((item) => {
           return (
             <TouchableOpacity className="w-[48%] mb-4" key={item.ticker}>
               <StockCard
@@ -57,10 +44,6 @@ export default function Explore() {
       </View>
     </View>
   );
-
-  if (loading || error) {
-    return <LoadingErrorView loading={loading} error={error} />;
-  }
 
   return (
     <View className="flex-1 bg-white px-4 pt-4">

@@ -9,9 +9,9 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
-import { getTopMovers } from "@/api/alphaVantage";
 import StockCard from "@/components/StockCard";
 import LoadingErrorView from "@/components/LoadingErrorView";
+import useTopMovers from "@/hooks/useTopMovers";
 
 export default function ViewAll() {
   const { title } = useLocalSearchParams();
@@ -21,14 +21,11 @@ export default function ViewAll() {
   const [filtered, setFiltered] = useState<any[]>([]);
   const [query, setQuery] = useState("");
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const { data, loading, error } = useTopMovers();
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       try {
-        const data = await getTopMovers();
         if (data?.top_gainers || data?.top_losers) {
           const list =
             title === "Top Gainers"
@@ -40,13 +37,11 @@ export default function ViewAll() {
           setFiltered(list);
         }
       } catch (err: any) {
-        setError(err);
-      } finally {
-        setLoading(false);
+        console.error("Error in ViewAll fetching data:", err);
       }
     };
     fetchData();
-  }, [title]);
+  }, [title, data]);
 
   const handleSearch = (text: string) => {
     setQuery(text);

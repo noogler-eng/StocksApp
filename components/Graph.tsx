@@ -7,8 +7,9 @@ import {
   Dimensions,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
-import timeData from "@/api/timeSeriesData.json";
 import { TimelineType } from "@/utils/types";
+import usePrices from "@/hooks/usePrices";
+import LoadingErrorView from "./LoadingErrorView";
 
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
@@ -21,14 +22,12 @@ export default function Graph({
   symbol: string;
   setChartTimeline: any;
 }) {
-  const [zoomLevel, setZoomLevel] = useState(1); // 1 = show all, 2 = show half, etc.
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const { data: selectedData, loading, error } = usePrices(timeline, symbol);
 
-  const selectedData = useMemo(() => {
-    if (timeline === "TIME_SERIES_INTRADAY") {
-      return timeData[timeline]?.Data || {};
-    }
-    return timeData[timeline] || {};
-  }, [timeline]);
+  if (loading || error || !selectedData) {
+    return <LoadingErrorView loading={loading} error={error} />;
+  }
 
   const chartData = useMemo(() => {
     const entries = Object.entries(selectedData);
@@ -70,7 +69,7 @@ export default function Graph({
       timeline === "TIME_SERIES_MONTHLY" ||
       timeline === "TIME_SERIES_MONTHLY_ADJUSTED"
     ) {
-      return dateStr.slice(5, 7); 
+      return dateStr.slice(5, 7);
     } else {
       return dateStr.slice(5, 10);
     }
