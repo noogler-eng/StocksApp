@@ -28,9 +28,9 @@ export default function Graph({
   const { isDark } = useTheme();
 
   // IMPORTANT: All hooks must be called before any conditional returns
+  const cardColor = isDark ? "#171717" : "#FFFFFF";
   const textColor = isDark ? "#f5f5f5" : "#111827";
   const subTextColor = isDark ? "#9ca3af" : "#6b7280";
-  const cardColor = isDark ? "#1c1c1e" : "#ffffff";
   const borderColor = isDark ? "#2a2a2d" : "#e5e7eb";
 
   const chartData = useMemo(() => {
@@ -95,11 +95,11 @@ export default function Graph({
     return (
       <View
         style={{
-          backgroundColor: cardColor,
           borderRadius: 16,
           padding: 16,
           marginTop: 16,
         }}
+        className={`${isDark ? "bg-neutral-900" : "bg-white"} shadow-sm`}
       >
         <View className="flex items-center justify-center h-40">
           <Text style={{ color: textColor, fontSize: 16, fontWeight: "600" }}>
@@ -151,7 +151,6 @@ export default function Graph({
   return (
     <View
       style={{
-        backgroundColor: cardColor,
         borderRadius: 16,
         padding: 16,
         marginTop: 16,
@@ -159,6 +158,7 @@ export default function Graph({
         shadowOpacity: 0.1,
         shadowRadius: 6,
       }}
+      className={`${isDark ? "bg-neutral-900" : "bg-white"} shadow-sm border border-${isDark ? "neutral-800" : "gray-200"}`}
     >
       <View className="flex-row justify-between items-center mb-3">
         <Text style={{ fontSize: 18, fontWeight: "bold", color: textColor }}>

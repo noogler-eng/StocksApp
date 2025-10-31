@@ -4,8 +4,8 @@ export default function GainLoss({
   price,
   average,
 }: {
-  price: string;
-  average: string;
+  price: Number;
+  average: Number;
 }) {
   const currentPrice = Number(price);
   const movingAvg = Number(average);

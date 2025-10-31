@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import React from "react";
 import { HapticTab } from "@/components/haptic-tab";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import Animated, {
   useAnimatedStyle,
   withTiming,
@@ -73,7 +73,13 @@ export default function TabLayout() {
           headerShown: true,
           header: () => (
             <View style={styles.headerContainer}>
-              <Text style={styles.title}>Stock App</Text>
+              <View className="flex-row items-center"> 
+                <Image
+                  source={require("@/assets/images/splash-icon.png")}
+                  style={{ width: 50, height: 50, borderRadius: 20 }}
+                />
+                <Text style={styles.title}>Stock App</Text>
+              </View>
 
               <TouchableOpacity
                 onPress={toggleTheme}
