@@ -4,9 +4,11 @@ import {
   Text,
   FlatList,
   RefreshControl,
+  Alert,
+  Animated,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import { getAll } from "@/storage/watchlistStorage";
+import { getAll, removeStock } from "@/storage/watchlistStorage";
 import StockCard from "@/components/StockCard";
 import LoadingErrorView from "@/components/LoadingErrorView";
 import { useTheme } from "@/context/ThemeContext";
@@ -18,6 +20,10 @@ export default function WatchlistDetail() {
   const [stocks, setStocks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+
+  const bgColor = isDark ? "#0D0D0D" : "#FFFFFF";
+  const textColor = isDark ? "#F1F5F9" : "#1E293B";
+  const subTextColor = isDark ? "#94A3B8" : "#64748B";
 
   useEffect(() => {
     loadData();
@@ -42,50 +48,46 @@ export default function WatchlistDetail() {
     setRefreshing(false);
   };
 
-  if (loading) {
-    return <LoadingErrorView loading={loading} error={null} />;
-  }
+  const handleRemove = async (symbol: string) => {
+    Alert.alert("Remove Stock", `Remove ${symbol} from this watchlist?`, [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Remove",
+        style: "destructive",
+        onPress: async () => {
+          await removeStock(name, symbol);
+          await loadData();
+        },
+      },
+    ]);
+  };
+
+  if (loading) return <LoadingErrorView loading={loading} error={null} />;
 
   return (
-    <View
-      className="flex-1 px-5 pt-6"
-      style={{
-        backgroundColor: isDark ? "#0D0D0D" : "#FFFFFF",
-      }}
-    >
+    <View className="flex-1 px-5 pt-6" style={{ backgroundColor: bgColor }}>
+      {/* Header */}
       <View className="flex-row items-center justify-between mb-5">
-        <Text
-          style={{
-            color: isDark ? "#F1F5F9" : "#1E293B",
-          }}
-          className="text-2xl font-bold"
-        >
+        <Text style={{ color: textColor }} className="text-2xl font-bold">
           {name}
         </Text>
-        <Text
-          style={{
-            color: isDark ? "#94A3B8" : "#64748B",
-          }}
-          className="text-base"
-        >
+
+        <Text style={{ color: subTextColor }} className="text-base">
           {stocks.length} {stocks.length === 1 ? "stock" : "stocks"}
         </Text>
       </View>
 
+      {/* Empty State */}
       {stocks.length === 0 ? (
         <View className="flex-1 items-center justify-center mt-10">
           <Text
-            style={{
-              color: isDark ? "#94A3B8" : "#64748B",
-            }}
+            style={{ color: subTextColor }}
             className="text-base text-center"
           >
             No stocks added in this watchlist yet.
           </Text>
           <Text
-            style={{
-              color: isDark ? "#64748B" : "#94A3B8",
-            }}
+            style={{ color: isDark ? "#64748B" : "#94A3B8" }}
             className="text-sm mt-2"
           >
             Add some from the Explore tab
@@ -106,7 +108,15 @@ export default function WatchlistDetail() {
             />
           }
           renderItem={({ item }) => (
-            <StockCard symbol={item.symbol} price={item.price} />
+            <Animated.View style={{ transform: [{ scale: 1 }] }}>
+              <StockCard
+                symbol={item.symbol}
+                price={item.price}
+                change={item.change}
+                isMain={false}
+                onRemove={handleRemove}
+              />
+            </Animated.View>
           )}
         />
       )}

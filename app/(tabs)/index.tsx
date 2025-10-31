@@ -75,7 +75,8 @@ export default function Explore() {
             <StockCard
               symbol={item.ticker}
               price={item.price}
-              change={item.change_percentage}
+              change={item.change_amount}
+              isMain={true}
             />
           </TouchableOpacity>
         ))}

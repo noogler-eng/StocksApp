@@ -147,6 +147,7 @@ export default function ViewAll() {
                     symbol={item.ticker}
                     price={item.price}
                     change={item.change_percentage}
+                    isMain={true}
                   />
                 </TouchableOpacity>
               </Link>
