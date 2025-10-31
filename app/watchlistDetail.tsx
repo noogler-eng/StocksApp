@@ -50,7 +50,7 @@ export default function WatchlistDetail() {
     <View
       className="flex-1 px-5 pt-6"
       style={{
-        backgroundColor: isDark ? "#0B0F19" : "#FFFFFF",
+        backgroundColor: isDark ? "#0D0D0D" : "#FFFFFF",
       }}
     >
       <View className="flex-row items-center justify-between mb-5">

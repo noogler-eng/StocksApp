@@ -9,6 +9,7 @@ import Avtaar from "@/components/Avtaar";
 import useOverview from "@/hooks/useOverview";
 import { TimelineType } from "@/utils/types";
 import { useTheme } from "@/context/ThemeContext";
+import GainLoss from "@/components/GainLoss";
 
 export default function ProductScreen() {
   const { symbol_price } = useLocalSearchParams<{ symbol_price: string }>();
@@ -19,6 +20,7 @@ export default function ProductScreen() {
     useState<TimelineType>("TIME_SERIES_DAILY");
 
   const { data: overview, loading, error } = useOverview(symbol);
+  console.log("Overview Data:", overview);
 
   const { isDark } = useTheme();
 
@@ -90,9 +92,7 @@ export default function ProductScreen() {
             >
               ${price}
             </Text>
-            <Text className="text-xs font-semibold text-green-400 mt-1">
-              +0.00 (0.00%)
-            </Text>
+            <GainLoss price={price} average={overview["50DayMovingAverage"]} />
           </View>
         </View>
       </View>

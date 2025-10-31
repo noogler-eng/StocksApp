@@ -23,7 +23,6 @@
       "predictiveBackGestureEnabled": false,
       "package": "com.x0xsharad.StockApp"
     },
-
     "web": {
       "output": "static",
       "favicon": "./assets/images/favicon.png",
@@ -47,6 +46,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "dc9dd141-e934-40dc-99e3-26795984d985"
+      }
+    },
+    "owner": "0xsharad"
   }
 }
