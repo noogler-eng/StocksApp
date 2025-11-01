@@ -104,6 +104,26 @@ StockApp/
 5. 💰 Portfolio tracker
 
 
+## Screenshots
+### Homepage(Explore)
+![WhatsApp Image 2025-11-01 at 11 41 05](https://github.com/user-attachments/assets/a7246802-ae8f-4f65-a741-8a762ee5d64c)
+![WhatsApp Image 2025-11-01 at 11 41 41](https://github.com/user-attachments/assets/d5b91609-2213-4589-9a01-42e82d679673)
+
+### ViewAll
+![WhatsApp Image 2025-11-01 at 11 42 04](https://github.com/user-attachments/assets/1df16fb7-cb35-4d39-9ac3-4180e678c103)
+
+### Stock Detial
+![WhatsApp Image 2025-11-01 at 11 42 50](https://github.com/user-attachments/assets/eb47ac7f-21a6-4181-abdd-a109f781bfa6)
+![WhatsApp Image 2025-11-01 at 11 43 20](https://github.com/user-attachments/assets/fd4a0a0e-cee3-4690-86ef-78e6db780b3c)
+
+### Watchlist
+![WhatsApp Image 2025-11-01 at 11 43 49](https://github.com/user-attachments/assets/39817a9c-859e-442f-869a-66bc3b28fdeb)
+![WhatsApp Image 2025-11-01 at 11 44 15](https://github.com/user-attachments/assets/88907684-d9d2-45a8-b47a-cadc5a39d1c7)
+![WhatsApp Image 2025-11-01 at 11 44 34](https://github.com/user-attachments/assets/f67f1a21-cd8b-458b-ac84-87d3e96ec570)
+![WhatsApp Image 2025-11-01 at 11 44 49](https://github.com/user-attachments/assets/915e8f4a-2ed0-4711-87a4-ce0d865d0fa7)
+![WhatsApp Image 2025-11-01 at 11 45 08](https://github.com/user-attachments/assets/2b062614-0030-4559-9fa9-e75bac2ec3bf)
+
+
 ## 👨‍💻 Author
 - Sharad Poddar
 - 📩 [Mail Me](sharadpoddar1001@gmail.com)
