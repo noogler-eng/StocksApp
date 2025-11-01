@@ -28,7 +28,7 @@ Follow these steps to run or modify the app locally 👇
 ### 3. Set up environment variables
 Create a .env file in the project root with your API key:
 ```bash
-   STOCK_DATA_API_KEY=your_api_key_here
+   PUBLIC_EXPO_STOCK_DATA_API_KEY=your_api_key_here
 ```
 
 ### 4. Start the app in development mode
