@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import overviewDemoData from "@/api/demoOverview.json";
+import overviewDemoData from "@/dummy_data/demoOverview.json";
 import axios from "axios";
 
 export default function useOverview(symbol: string) {

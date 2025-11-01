@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import demoData from "@/api/demoTopMovers.json";
+import demoData from "@/dummy_data/demoTopMovers.json";
 import axios from "axios";
 
 const CACHE_KEY = "TOP_MOVERS_CACHE";

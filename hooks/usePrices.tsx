@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import timeData from "@/api/timeSeriesData.json";
+import timeData from "@/dummy_data/timeSeriesData.json";
 import axios from "axios";
 
 export default function usePrices(
