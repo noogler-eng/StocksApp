@@ -16,7 +16,7 @@ Follow these steps to run or modify the app locally 👇
 
 ### 1. Clone the repository
 ```bash
-   git clone https://github.com/yourusername/StockApp.git
+   git clone https://github.com/noogler-eng/StocksApp
    cd StockApp
 ```
 
@@ -35,14 +35,15 @@ Create a .env file in the project root with your API key:
 ```bash
    npm run start
 ```
-Then scan the QR code using the Expo Go app on your mobile device or run in an emulator:
-Press a → Run on Android
-Press i → Run on iOS
+- Then scan the QR code using the Expo Go app on your mobile device or run in an emulator:
+- Press a → Run on Android
+- Press i → Run on iOS
 
 ---
 
 
 ## 🧱 Folder Structure
+```bash
 StockApp/
 ├── app/
 │   ├── (tabs)/
@@ -83,7 +84,7 @@ StockApp/
 ├── babel.config.js             # Babel setup (NativeWind + dotenv)
 ├── package.json
 └── README.md
-
+```
 
 ## ✨ Features
 1. 📊 Real-time Stock Data using custom hooks (useOverview, useTopMovers)
@@ -104,7 +105,7 @@ StockApp/
 
 
 ## 👨‍💻 Author
-Sharad Poddar
-📩 [Mail Me](sharadpoddar1001@gmail.com)
-🌐 [LinkedIn Profile](https://www.linkedin.com/in/sharad-poddar-895985283/)
+- Sharad Poddar
+- 📩 [Mail Me](sharadpoddar1001@gmail.com)
+- 🌐 [LinkedIn Profile](https://www.linkedin.com/in/sharad-poddar-895985283/)
 
