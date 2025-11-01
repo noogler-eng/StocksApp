@@ -5,6 +5,11 @@ You can download the latest build of the app here:
 
 ---
 
+👉 you can watch the demo of application here:
+[Demo loom video](https://www.loom.com/share/5a53d3a5fecd409ab49a1f3d0cd9d4b8)
+
+---
+
 ## 🚀 Get Started
 
 Follow these steps to run or modify the app locally 👇
@@ -100,6 +105,6 @@ StockApp/
 
 ## 👨‍💻 Author
 Sharad Poddar
-📩 [sharadpoddar1001@gmail.com]
-🌐 [[LinkedIn Profile](https://www.linkedin.com/in/sharad-poddar-895985283/)]
+📩 [Mail Me](sharadpoddar1001@gmail.com)
+🌐 [LinkedIn Profile](https://www.linkedin.com/in/sharad-poddar-895985283/)
 
