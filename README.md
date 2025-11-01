@@ -1,5 +1,9 @@
 # 📈 StockApp (React Native) 👋
 
+[NOTE]: Thre is API KEY limit 25 per day due to which whenever there is rate limit, i am using Dummy data for testing, easy for checking wheather application is working or not. (dummy data is taken using DOCS and AI)
+
+---
+
 You can download the latest build of the app here:  
 👉 [Expo Build Download Link](https://expo.dev/accounts/0xsharad/projects/StockApp/builds/0b00a65a-aaaf-4769-abef-0ab750b5bac7)
 
