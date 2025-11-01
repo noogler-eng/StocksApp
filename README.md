@@ -1,6 +1,9 @@
 # 📈 StockApp (React Native) 👋
 
 [NOTE]: Thre is API KEY limit 25 per day due to which whenever there is rate limit, i am using Dummy data for testing, easy for checking wheather application is working or not. (dummy data is taken using DOCS and AI)
+- whenver API key is not working.
+- you can go to APPL stock.
+- application will working on dummy data for that.
 
 ---
 
@@ -90,6 +93,8 @@ StockApp/
 └── README.md
 ```
 
+---
+
 ## ✨ Features
 1. 📊 Real-time Stock Data using custom hooks (useOverview, useTopMovers)
 2. 🧾 Watchlist Management — add/remove stocks stored in local AsyncStorage
@@ -99,6 +104,29 @@ StockApp/
 6. ⚙️ Optimized & Modular Codebase
 7. 🔐 Environment-secured API key loading
 
+---
+
+## ⚡️ Local Caching System (AsyncStorage)
+- implements an efficient local caching mechanism using AsyncStorage to improve performance, reduce API calls, and provide instant loading even when offline or rate-limited by AlphaVantage.
+### 🧩 How It Works
+- Every data-fetching hook (useTopMovers, usePrices, useOverview) follows a structured caching workflow:
+1. Check for Cached Data
+2. On every hook call, the app first checks if a cached response exists in AsyncStorage.
+3. Cached data is stored under unique keys (e.g., TOP_MOVERS_CACHE, PRICE_CACHE_AAPL_DAILY, OVERVIEW_CACHE_TSLA).
+4. If Cache Exists
+5. The cached result is loaded instantly for a smooth UI experience.
+6. For rapidly changing data (like top movers and prices), a background API refresh runs silently.
+7. For rarely changing data (like company overview), the API is skipped until cache expiry.
+8. If Cache Missing or Expired
+9. A fresh API call is made to AlphaVantage.
+10. The new data is saved in cache with a timestamp.
+11. Future loads use this cached data until it expires.
+12. If API Limit or Error
+13. The hook gracefully falls back to:
+14. Previously cached data (if available), or
+15. Local demo JSON files (for development/offline mode).
+
+---
 
 ## 🧩 Future Enhancements
 1. 📡 Live data updates using WebSocket streams
@@ -107,6 +135,7 @@ StockApp/
 4. 🔔 Notifications for price changes
 5. 💰 Portfolio tracker
 
+---
 
 ## Screenshots
 ### 🏠 Homepage (Explore)
