@@ -8,15 +8,17 @@ import Animated, {
 } from "react-native-reanimated";
 import { Moon, Sun } from "lucide-react-native";
 import { useTheme } from "@/context/ThemeContext";
+import useColors from "@/hooks/useColors";
 
 export default function TabLayout() {
   const { isDark, toggleTheme } = useTheme();
+  const colors = useColors();
 
   const styles = StyleSheet.create({
     headerContainer: {
-      backgroundColor: isDark ? "#0D0D0D" : "#FFFFFF",
+      backgroundColor: colors.background,
       borderBottomWidth: 1,
-      borderBottomColor: isDark ? "#333" : "#E0E0E0",
+      borderBottomColor: colors.border,
       paddingHorizontal: 16,
       paddingVertical: 12,
       flexDirection: "row",
@@ -26,7 +28,7 @@ export default function TabLayout() {
     title: {
       fontSize: 24,
       fontWeight: "800",
-      color: isDark ? "#FFFFFF" : "#000000",
+      color: colors.textPrimary,
     },
     toggleButton: {
       width: 48,
@@ -34,7 +36,7 @@ export default function TabLayout() {
       borderRadius: 24,
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: isDark ? "#1E1E1E" : "#F2F2F2",
+      backgroundColor: colors.card,
     },
   });
 
@@ -45,12 +47,12 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: isDark ? "#FFFFFF" : "#000000",
-        tabBarInactiveTintColor: isDark ? "#AAAAAA" : "#666666",
+        tabBarActiveTintColor: colors.textPrimary,
+        tabBarInactiveTintColor: colors.textSecondary,
         tabBarStyle: {
           borderTopWidth: 1,
-          borderTopColor: isDark ? "#333" : "#E0E0E0",
-          backgroundColor: isDark ? "#0D0D0D" : "#FFFFFF",
+          borderTopColor: colors.border,
+          backgroundColor: colors.background,
           elevation: 0,
           height: 80,
         },
@@ -65,6 +67,7 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
       }}
     >
+      {/* 🏠 Home Tab */}
       <Tabs.Screen
         name="index"
         options={{
@@ -73,12 +76,14 @@ export default function TabLayout() {
           headerShown: true,
           header: () => (
             <View style={styles.headerContainer}>
-              <View className="flex-row items-center"> 
+              <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <Image
                   source={require("@/assets/images/splash-icon.png")}
                   style={{ width: 50, height: 50, borderRadius: 20 }}
                 />
-                <Text style={styles.title}>Stock App</Text>
+                <Text style={[styles.title, { marginLeft: 10 }]}>
+                  Stock App
+                </Text>
               </View>
 
               <TouchableOpacity
@@ -88,9 +93,9 @@ export default function TabLayout() {
               >
                 <Animated.View style={iconStyle}>
                   {isDark ? (
-                    <Sun size={26} color="#FFD700" />
+                    <Sun size={26} color={colors.accent} />
                   ) : (
-                    <Moon size={26} color="#000" />
+                    <Moon size={26} color={colors.textPrimary} />
                   )}
                 </Animated.View>
               </TouchableOpacity>
@@ -99,6 +104,7 @@ export default function TabLayout() {
         }}
       />
 
+      {/* 📈 Watchlist Tab */}
       <Tabs.Screen
         name="watchlist"
         options={{

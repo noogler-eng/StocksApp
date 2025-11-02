@@ -1,81 +1,14 @@
 import React, { useCallback, useState } from "react";
-import {
-  View,
-  FlatList,
-  Text,
-  TouchableOpacity,
-  Alert,
-  StyleSheet,
-} from "react-native";
+import { View, FlatList, Text, TouchableOpacity, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { deleteList, getAll } from "@/storage/watchlistStorage";
 import { useRouter, useFocusEffect } from "expo-router";
-import { useTheme } from "@/context/ThemeContext";
+import useColors from "@/hooks/useColors";
 
 export default function WatchlistScreen() {
   const [lists, setLists] = useState<{ [key: string]: any[] }>({});
   const router = useRouter();
-  const { isDark } = useTheme();
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: isDark ? "#0D0D0D" : "#FFFFFF",
-      padding: 20,
-    },
-    emptyText: {
-      color: isDark ? "#AAAAAA" : "#555555",
-      textAlign: "center",
-      marginTop: 40,
-      fontSize: 16,
-    },
-    card: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-      backgroundColor: isDark ? "#1A1A1A" : "#FFFFFF",
-      borderColor: isDark ? "#333333" : "#E0E0E0",
-      borderWidth: 1,
-      padding: 16,
-      borderRadius: 16,
-      marginBottom: 12,
-      shadowColor: isDark ? "#000" : "#00000020",
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.2,
-      shadowRadius: 3,
-      elevation: 2,
-    },
-    listTitleContainer: {
-      flex: 1,
-    },
-    titleRow: {
-      flexDirection: "row",
-      alignItems: "center",
-      marginBottom: 4,
-    },
-    listName: {
-      fontSize: 18,
-      fontWeight: "600",
-      color: isDark ? "#FFFFFF" : "#111111",
-      flexShrink: 1,
-    },
-    deleteBtn: {
-      marginLeft: 10,
-      backgroundColor: "#E63946",
-      borderRadius: 8,
-      paddingHorizontal: 8,
-      paddingVertical: 4,
-    },
-    deleteText: {
-      color: "#FFF",
-      fontSize: 12,
-      fontWeight: "600",
-    },
-    stockCount: {
-      fontSize: 13,
-      color: isDark ? "#AAAAAA" : "#666666",
-    },
-  });
+  const colors = useColors();
 
   // Reload data when screen is focused
   useFocusEffect(
@@ -120,33 +53,95 @@ export default function WatchlistScreen() {
       <TouchableOpacity
         onPress={() => handleListPress(item)}
         activeOpacity={0.9}
-        style={styles.card}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: colors.card,
+          borderColor: colors.border,
+          borderWidth: 1,
+          padding: 16,
+          borderRadius: 16,
+          marginBottom: 12,
+          shadowColor: colors.muted,
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.2,
+          shadowRadius: 3,
+          elevation: 2,
+        }}
       >
-        <View style={styles.listTitleContainer}>
-          <View style={styles.titleRow}>
-            <Text style={styles.listName}>{item}</Text>
-            <TouchableOpacity onPress={handleDelete} style={styles.deleteBtn}>
-              <Text style={styles.deleteText}>Delete</Text>
+        <View style={{ flex: 1 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              marginBottom: 4,
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "600",
+                color: colors.textPrimary,
+                flexShrink: 1,
+              }}
+            >
+              {item}
+            </Text>
+            <TouchableOpacity
+              onPress={handleDelete}
+              style={{
+                marginLeft: 10,
+                backgroundColor: colors.marker,
+                borderRadius: 8,
+                paddingHorizontal: 8,
+                paddingVertical: 4,
+              }}
+            >
+              <Text
+                style={{
+                  color: colors.textPrimary,
+                  fontSize: 12,
+                  fontWeight: "600",
+                }}
+              >
+                Delete
+              </Text>
             </TouchableOpacity>
           </View>
-          <Text style={styles.stockCount}>
+
+          <Text
+            style={{
+              fontSize: 13,
+              color: colors.textSecondary,
+            }}
+          >
             {lists[item]?.length || 0} stocks
           </Text>
         </View>
 
-        <Ionicons
-          name="chevron-forward"
-          size={22}
-          color={isDark ? "#AAAAAA" : "#888888"}
-        />
+        <Ionicons name="chevron-forward" size={22} color={colors.marker} />
       </TouchableOpacity>
     );
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: colors.background,
+        padding: 20,
+      }}
+    >
       {Object.keys(lists).length === 0 ? (
-        <Text style={styles.emptyText}>
+        <Text
+          style={{
+            color: colors.textSecondary,
+            textAlign: "center",
+            marginTop: 40,
+            fontSize: 16,
+          }}
+        >
           You haven’t created any watchlists yet.
         </Text>
       ) : (

@@ -7,7 +7,7 @@ import WatchlistButton from "@/components/WatchlistButton";
 import LoadingErrorView from "@/components/LoadingErrorView";
 import useOverview from "@/hooks/useOverview";
 import { TimelineType } from "@/utils/types";
-import { useTheme } from "@/context/ThemeContext";
+import useColors from "@/hooks/useColors";
 import OverviewStats from "@/components/OverviewStats";
 import StockInfo from "@/components/StockInfo";
 import StockAbout from "@/components/StockAbout";
@@ -21,8 +21,7 @@ export default function ProductScreen() {
     useState<TimelineType>("TIME_SERIES_DAILY");
 
   const { data: overview, loading, error } = useOverview(symbol);
-
-  const { isDark } = useTheme();
+  const colors = useColors();
 
   if (loading || error || !overview) {
     return <LoadingErrorView loading={loading} error={error} />;
@@ -30,20 +29,24 @@ export default function ProductScreen() {
 
   return (
     <ScrollView
-      className={`flex-1 px-5 ${isDark ? "bg-black" : "bg-white"}`}
+      className="flex-1 px-5"
+      style={{ backgroundColor: colors.background }}
       stickyHeaderIndices={[0]}
       showsVerticalScrollIndicator={false}
     >
       {/* Header */}
       <View
-        className={`flex-row items-center justify-between px-4 py-3 mb-2 border-b ${
-          isDark ? "border-gray-700 bg-black" : "border-gray-300 bg-white"
-        }`}
+        className="flex-row items-center justify-between px-4 py-3 mb-2"
+        style={{
+          backgroundColor: colors.background,
+          borderBottomColor: colors.border,
+          borderBottomWidth: 1,
+          borderStyle: "solid",
+        }}
       >
         <Text
-          className={`text-2xl font-extrabold ${
-            isDark ? "text-white" : "text-black"
-          }`}
+          className="text-2xl font-extrabold"
+          style={{ color: colors.textPrimary }}
         >
           Detailed Overview
         </Text>
@@ -51,12 +54,7 @@ export default function ProductScreen() {
       </View>
 
       {/* Stock Info */}
-      <StockInfo
-        symbol={symbol}
-        overview={overview}
-        price={Number(price)}
-        isDark={isDark}
-      />
+      <StockInfo symbol={symbol} overview={overview} price={Number(price)} />
 
       {/* Graph */}
       <Graph
@@ -67,15 +65,15 @@ export default function ProductScreen() {
 
       {/* About Section */}
       <View
-        className={`border rounded-2xl p-4 mb-12 mt-6 ${
-          isDark
-            ? "bg-neutral-900 border-neutral-800"
-            : "bg-white border-gray-200"
-        }`}
+        className="border rounded-2xl p-4 mb-12 mt-6"
+        style={{
+          backgroundColor: colors.card,
+          borderColor: colors.border,
+        }}
       >
-        <StockAbout symbol={symbol} overview={overview} isDark={isDark} />
+        <StockAbout symbol={symbol} overview={overview} />
         <FiftyTwoWeekRange overview={overview} price={price} />
-        <OverviewStats overview={overview} isDark={isDark} />
+        <OverviewStats overview={overview} />
       </View>
     </ScrollView>
   );

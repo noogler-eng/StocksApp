@@ -2,8 +2,16 @@ import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import Avtaar from "./Avtaar";
 import { useRouter } from "expo-router";
-import { useTheme } from "@/context/ThemeContext";
 import { Ionicons } from "@expo/vector-icons";
+import useColors from "@/hooks/useColors";
+
+type StockCardProps = {
+  symbol: string;
+  price: number;
+  change?: number;
+  isMain?: boolean;
+  onRemove?: (symbol: string) => void;
+};
 
 export default function StockCard({
   symbol,
@@ -11,33 +19,24 @@ export default function StockCard({
   change,
   isMain = true,
   onRemove,
-}: {
-  symbol: string;
-  price: number;
-  change?: number;
-  isMain?: boolean;
-  onRemove?: (symbol: string) => void;
-}) {
-  const { isDark } = useTheme();
+}: StockCardProps) {
+  const colors = useColors();
   const router = useRouter();
 
+  // ✅ Compute change color dynamically from theme
   const gainColor =
     change === undefined
-      ? isDark
-        ? "#AAAAAA"
-        : "#6B7280"
+      ? colors.textSecondary
       : change > 0
-        ? "#22C55E"
-        : change < 0
-          ? "#EF4444"
-          : isDark
-            ? "#AAAAAA"
-            : "#6B7280";
+      ? colors.success
+      : change < 0
+      ? colors.danger
+      : colors.textSecondary;
 
   const styles = StyleSheet.create({
     card: {
-      backgroundColor: isDark ? "#1A1A1A" : "#FFFFFF",
-      borderColor: isDark ? "#2D2D2D" : "#E5E7EB",
+      backgroundColor: colors.card,
+      borderColor: colors.border,
       borderWidth: 1,
       borderRadius: 16,
       padding: 16,
@@ -45,22 +44,22 @@ export default function StockCard({
       width: 150,
       marginHorizontal: 8,
       marginVertical: 6,
-      shadowColor: isDark ? "#000" : "#00000020",
+      shadowColor: colors.muted,
       shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.2,
-      shadowRadius: 3,
+      shadowOpacity: 0.15,
+      shadowRadius: 4,
       elevation: 3,
       position: "relative",
     },
     symbol: {
       fontSize: 16,
       fontWeight: "600",
-      color: isDark ? "#FFFFFF" : "#1F2937",
+      color: colors.textPrimary,
       marginTop: 6,
     },
     price: {
       fontSize: 14,
-      color: isDark ? "#AAAAAA" : "#6B7280",
+      color: colors.textSecondary,
       marginTop: 2,
     },
     change: {
@@ -69,34 +68,24 @@ export default function StockCard({
       fontWeight: "600",
       color: gainColor,
     },
-    selectedOverlay: {
-      ...StyleSheet.absoluteFillObject,
-      backgroundColor: isDark
-        ? "rgba(249,115,22,0.08)"
-        : "rgba(249,115,22,0.06)",
-      borderRadius: 16,
-    },
-    iconButton: {
+    removeButtonWrapper: {
       position: "absolute",
       top: 8,
-      backgroundColor: isDark ? "#2D2D2D" : "#F3F4F6",
-      borderRadius: 12,
-      padding: 4,
-    },
-    crossButton: {
-      right: 32,
-    },
-    arrowButton: {
       right: 8,
+      zIndex: 10,
+    },
+    removeButton: {
+      width: 28,
+      height: 28,
+      borderRadius: 14,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: `${colors.danger}20`,
     },
   });
 
   const handlePress = () => {
-    if (!isMain) {
-      if (!onRemove) {
-        return;
-      }
-    }
+    if (!isMain && !onRemove) return;
     const symbol_price = `${symbol}_${price}`;
     router.push(`/product/${symbol_price}`);
   };
@@ -108,18 +97,13 @@ export default function StockCard({
       activeOpacity={onRemove ? 1 : 0.9}
     >
       {onRemove && (
-        <View className="absolute top-2 right-2 flex flex-col justify-between h-16 z-10">
+        <View style={styles.removeButtonWrapper}>
           <TouchableOpacity
             onPress={() => onRemove(symbol)}
             activeOpacity={0.8}
-            className={`w-7 h-7 rounded-full items-center justify-center shadow 
-        ${isDark ? "bg-red-500/20" : "bg-red-200/80"}`}
+            style={styles.removeButton}
           >
-            <Ionicons
-              name="close"
-              size={16}
-              color={isDark ? "#FCA5A5" : "#DC2626"}
-            />
+            <Ionicons name="close" size={16} color={colors.danger} />
           </TouchableOpacity>
         </View>
       )}

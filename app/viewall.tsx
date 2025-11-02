@@ -13,12 +13,12 @@ import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import StockCard from "@/components/StockCard";
 import LoadingErrorView from "@/components/LoadingErrorView";
 import useTopMovers from "@/hooks/useTopMovers";
-import { useTheme } from "@/context/ThemeContext";
+import useColors from "@/hooks/useColors";
 
 export default function ViewAll() {
   const { title } = useLocalSearchParams();
   const router = useRouter();
-  const { isDark } = useTheme();
+  const colors = useColors();
 
   const [stocks, setStocks] = useState<any[]>([]);
   const [filtered, setFiltered] = useState<any[]>([]);
@@ -54,7 +54,7 @@ export default function ViewAll() {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: isDark ? "#0D0D0D" : "#FFFFFF",
+      backgroundColor: colors.background,
     },
     header: {
       flexDirection: "row",
@@ -63,36 +63,35 @@ export default function ViewAll() {
       paddingHorizontal: 16,
       paddingVertical: 12,
       borderBottomWidth: 1,
-      borderBottomColor: isDark ? "#333" : "#E0E0E0",
-      backgroundColor: isDark ? "#0D0D0D" : "#FFFFFF",
+      borderBottomColor: colors.border,
+      backgroundColor: colors.background,
     },
     headerText: {
       fontSize: 20,
       fontWeight: "700",
-      color: isDark ? "#FFFFFF" : "#111111",
+      color: colors.textPrimary,
       flex: 1,
     },
     searchContainer: {
       flexDirection: "row",
       alignItems: "center",
-      backgroundColor: isDark ? "#1A1A1A" : "#F3F4F6",
+      backgroundColor: colors.surface,
       marginHorizontal: 16,
       marginTop: 12,
       paddingHorizontal: 12,
       paddingVertical: 8,
       borderRadius: 12,
+      borderWidth: 1,
+      borderColor: colors.border,
     },
     searchInput: {
       flex: 1,
       marginLeft: 8,
       fontSize: 16,
-      color: isDark ? "#FFFFFF" : "#000000",
-    },
-    searchIcon: {
-      color: isDark ? "#AAA" : "#888",
+      color: colors.textPrimary,
     },
     loadingText: {
-      color: isDark ? "#AAAAAA" : "#555555",
+      color: colors.textSecondary,
       marginTop: 8,
     },
     gridContainer: {
@@ -109,11 +108,7 @@ export default function ViewAll() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons
-            name="arrow-back"
-            size={22}
-            color={isDark ? "#FFFFFF" : "#333333"}
-          />
+          <Ionicons name="arrow-back" size={22} color={colors.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.headerText}>{title || "View All"}</Text>
         <View style={{ width: 22 }} />
@@ -121,10 +116,10 @@ export default function ViewAll() {
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={18} color={styles.searchIcon.color} />
+        <Ionicons name="search" size={18} color={colors.muted} />
         <TextInput
           placeholder="Search stocks..."
-          placeholderTextColor={isDark ? "#888" : "#666"}
+          placeholderTextColor={colors.textSecondary}
           style={styles.searchInput}
           value={query}
           onChangeText={handleSearch}
@@ -134,7 +129,7 @@ export default function ViewAll() {
       {/* Content */}
       {loading ? (
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color={isDark ? "#FFF" : "#000"} />
+          <ActivityIndicator size="large" color={colors.textPrimary} />
           <Text style={styles.loadingText}>Loading {title}...</Text>
         </View>
       ) : (

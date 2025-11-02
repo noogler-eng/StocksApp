@@ -1,12 +1,14 @@
-import { Text, View } from "react-native";
+import { Text } from "react-native";
+import useColors from "@/hooks/useColors";
 
 export default function GainLoss({
   price,
   average,
 }: {
-  price: Number;
-  average: Number;
+  price: number;
+  average: number;
 }) {
+  const colors = useColors();
   const currentPrice = Number(price);
   const movingAvg = Number(average);
 
@@ -16,9 +18,12 @@ export default function GainLoss({
 
   return (
     <Text
-      className={`text-xs font-semibold mt-1 ${
-        isPositive ? "text-green-400" : "text-red-400"
-      }`}
+      style={{
+        color: isPositive ? colors.success : colors.danger,
+        fontSize: 12,
+        fontWeight: "600",
+        marginTop: 4,
+      }}
     >
       {isPositive ? "+" : ""}
       {difference.toFixed(2)} ({percentChange.toFixed(2)}%)

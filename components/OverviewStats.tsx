@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
+import useColors from "@/hooks/useColors";
 
 type OverviewProps = {
   overview: {
@@ -9,15 +10,13 @@ type OverviewProps = {
     DividendYield: string;
     ProfitMargin: string;
   };
-  isDark?: boolean;
 };
 
-export default function OverviewStats({
-  overview,
-  isDark = false,
-}: OverviewProps) {
+export default function OverviewStats({ overview }: OverviewProps) {
+  const colors = useColors();
+
   const stats = [
-    ["M.Cap", `$${(overview.MarketCapitalization / 1e12).toFixed(2)}T`],
+    ["M.Cap", `$${(overview.MarketCapitalization / 1e9).toFixed(2)}T`],
     ["P/E", overview.PERatio],
     ["Beta", overview.Beta],
     ["Div.Yield", overview.DividendYield],
@@ -26,23 +25,22 @@ export default function OverviewStats({
 
   return (
     <View
-      className={`flex-row justify-between items-center mt-8 px-4 py-3 rounded-2xl ${
-        isDark ? "bg-[#1a1a1a] rounded-xl" : "bg-[#f3f4f6] rounded-xl"
-      }`}
+      className="flex-row justify-between items-center mt-8 px-4 py-3 rounded-2xl"
+      style={{
+        backgroundColor: colors.surface,
+      }}
     >
       {stats.map(([label, value]) => (
         <View key={label} className="items-center flex-1">
           <Text
-            className={`text-[10px] font-semibold ${
-              isDark ? "text-gray-400" : "text-gray-600"
-            }`}
+            className="text-[10px] font-semibold"
+            style={{ color: colors.textSecondary }}
           >
             {label}
           </Text>
           <Text
-            className={`text-sm font-bold ${
-              isDark ? "text-white" : "text-gray-900"
-            }`}
+            className="text-sm font-bold"
+            style={{ color: colors.textPrimary }}
           >
             {value || "--"}
           </Text>

@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
+import useColors from "@/hooks/useColors";
 
 type StockAboutProps = {
   symbol: string;
@@ -8,36 +9,32 @@ type StockAboutProps = {
     Industry: string;
     Sector: string;
   };
-  isDark?: boolean;
 };
 
-export default function StockAbout({
-  symbol,
-  overview,
-  isDark = false,
-}: StockAboutProps) {
+export default function StockAbout({ symbol, overview }: StockAboutProps) {
+  const colors = useColors();
+
   return (
     <View
-      className={`p-4 rounded-2xl ${
-        isDark
-          ? "bg-neutral-900 border border-neutral-800"
-          : "bg-white border border-gray-200"
-      } shadow-sm`}
+      className="p-4 rounded-2xl shadow-sm"
+      style={{
+        backgroundColor: colors.card,
+        borderColor: colors.border,
+        borderWidth: 1,
+      }}
     >
       {/* Title */}
       <Text
-        className={`font-extrabold text-xl mb-3 ${
-          isDark ? "text-white" : "text-gray-900"
-        }`}
+        className="font-extrabold text-xl mb-3"
+        style={{ color: colors.textPrimary }}
       >
         About {symbol}
       </Text>
 
       {/* Description */}
       <Text
-        className={`text-[13px] leading-5 ${
-          isDark ? "text-gray-300" : "text-gray-800"
-        }`}
+        className="text-[13px] leading-5"
+        style={{ color: colors.textSecondary }}
       >
         {overview?.Description
           ? overview.Description.trim()
@@ -48,33 +45,46 @@ export default function StockAbout({
       <View className="flex-row flex-wrap items-center gap-2 mt-4">
         {overview?.Industry ? (
           <View
-            className={`px-3 py-1.5 rounded-full ${
-              isDark ? "bg-orange-950/50" : "bg-orange-100"
-            }`}
+            className="px-3 py-1.5 rounded-full"
+            style={{
+              backgroundColor:
+                colors === undefined ? "#FEE2E2" : colors.muted + "20",
+            }}
           >
             <Text
-              className={`text-sm font-medium ${
-                isDark ? "text-orange-400" : "text-orange-700"
-              }`}
+              className="text-sm font-medium"
+              style={{ color: colors.accent }}
             >
               Industry:{" "}
-              <Text className="font-semibold">{overview.Industry}</Text>
+              <Text
+                className="font-semibold"
+                style={{ color: colors.textPrimary }}
+              >
+                {overview.Industry}
+              </Text>
             </Text>
           </View>
         ) : null}
 
         {overview?.Sector ? (
           <View
-            className={`px-3 py-1.5 rounded-full ${
-              isDark ? "bg-orange-950/50" : "bg-orange-100"
-            }`}
+            className="px-3 py-1.5 rounded-full"
+            style={{
+              backgroundColor:
+                colors === undefined ? "#FEE2E2" : colors.muted + "20",
+            }}
           >
             <Text
-              className={`text-sm font-medium ${
-                isDark ? "text-orange-400" : "text-orange-700"
-              }`}
+              className="text-sm font-medium"
+              style={{ color: colors.accent }}
             >
-              Sector: <Text className="font-semibold">{overview.Sector}</Text>
+              Sector:{" "}
+              <Text
+                className="font-semibold"
+                style={{ color: colors.textPrimary }}
+              >
+                {overview.Sector}
+              </Text>
             </Text>
           </View>
         ) : null}
